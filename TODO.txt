@@ -1,0 +1,21 @@
+level saving
+level editor
+fix CRT/Sine shader interaction
+reuse textures for modernGL instead of creating a new one and discarding every frame
+more robust dev tools
+creatures with procedural animation
+
+
+temporary level storage:
+ballOne = objects.Ball(111, -123, 12)
+ballTwo = objects.Ball(340, 123, 12)
+ballThree = objects.Ball(222, 123, 30)
+ballFour = objects.Ball(222, 123, 20)
+wallOne = objects.Wall((0, 340), (400, 360), (0, 400), (400, 400))
+wallTwo = objects.Wall((350, -400), (400, -400), (395, 400), (400, 400))
+wallThree = objects.Wall((0, -400), (25, -400), (0, 400), (25, 400))
+wallFour = objects.Wall((200, 300), (125, 400), (125, 400), (350, 400))
+wallFive = objects.Wall((0, -400), (0, -380), (400, -400), (400, -380))
+stringOne = objects.String(ballTwo.body, ballOne.body, 25)
+stringTwo = objects.String(ballFour.body, ballOne.body, 40)
+stringThree = objects.String(ballFour.body, (200, 0), 50, "anchored")
