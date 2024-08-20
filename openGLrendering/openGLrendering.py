@@ -1,5 +1,6 @@
 import moderngl
 from array import array
+import os.path
 
 ctx = moderngl.create_context()
 
@@ -11,10 +12,10 @@ quad_buffer = ctx.buffer(data=array('f', [
     1.0, -1.0, 1.0, 1.0,  # bottom right
 ]))
 
-with open('openGLrendering/shader.vert') as file:
+with open(os.path.join('openGLrendering', 'shader.vert')) as file:
     vert_shader = file.read()
 
-with open('openGLrendering/shader.frag') as file:
+with open(os.path.join('openGLrendering', 'shader.frag')) as file:
     frag_shader = file.read()
 
 program = ctx.program(vertex_shader=vert_shader, fragment_shader=frag_shader)

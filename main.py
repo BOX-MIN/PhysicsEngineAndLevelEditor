@@ -6,6 +6,9 @@ from PymunkPhysicsAndLevels import objects
 
 import openGLrendering.openGLrendering as oGL
 
+import os.path
+import json
+
 import setup
 from setup import *
 
@@ -34,13 +37,28 @@ def handle_events():
 
         manager.process_events(event)
 
-def load_shelved_values(room):
-    level = {}
-    objects = {levelobject: levelobject() for levelobject in level}
+def save_to_json(room, key, list):
+    with open(os.path.join('PymunkPhysicsAndLevels', 'LevelData', str(room) + '.json'), 'r+') as file:
+        try:
+            data = json.load(file)
+            data.update({key: list})
+            file.seek(0)
+            json.dump(data, file)
+        except json.decoder.JSONDecodeError:
+            data = {key: list}
+            json.dump(data, file)
 
+def load_from_json(room):
+    with open(os.path.join('PymunkPhysicsAndLevels', 'LevelData', str(room) + '.json'), 'r+') as file:
+        level_dict = json.load(file)
+        return level_dict
+
+room = 'testRoom'
+save_to_json(room, with open(os.path.join('PymunkPhysicsAndLevels', 'LevelData', str(room) + '.json'), 'r+') as file: len(str(file)), [str(Ball), 111, -123, 12])
+print(load_from_json('testRoom'))
 
 def main():
-    load_shelved_values(1)
+
 
     Mx, My = pygame.mouse.get_pos()
     mouseCursorBall = objects.KinematicObject(Mx, My, 15)
@@ -79,7 +97,8 @@ def main():
         oGL.program['time'] = setup.time
         oGL.program['amplitude'] = float(GUI_manager.SineWaveSlider1.slider.get_current_value() / 1000)
         oGL.program['rate'] = float(GUI_manager.SineWaveSlider2.slider.get_current_value() / 1000)
-        oGL.program['center'] = (GUI_manager.CRTSlider1.slider.get_current_value(), GUI_manager.CRTSlider2.slider.get_current_value())
+        oGL.program['center'] = (GUI_manager.CRTSlider1.slider.get_current_value(),
+                                 GUI_manager.CRTSlider2.slider.get_current_value())
         oGL.program['warp'] = GUI_manager.CRTSlider3.slider.get_current_value()
         oGL.render_object.render(mode=oGL.moderngl.TRIANGLE_STRIP)
 
@@ -92,5 +111,4 @@ def main():
         space.step(1/fps)
 
 
-main()
-
+#main()
