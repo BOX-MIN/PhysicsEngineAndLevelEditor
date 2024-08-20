@@ -2,17 +2,16 @@ import sys
 
 from pygame import *
 
+import save_load_system
 from PymunkPhysicsAndLevels import objects
 
 import openGLrendering.openGLrendering as oGL
-
-import os.path
-import json
 
 import setup
 from setup import *
 
 from GUI import GUI_objects, GUI_manager
+
 
 def handle_events():
     for event in pygame.event.get():
@@ -37,28 +36,20 @@ def handle_events():
 
         manager.process_events(event)
 
-def save_to_json(room, key, list):
-    with open(os.path.join('PymunkPhysicsAndLevels', 'LevelData', str(room) + '.json'), 'r+') as file:
-        try:
-            data = json.load(file)
-            data.update({key: list})
-            file.seek(0)
-            json.dump(data, file)
-        except json.decoder.JSONDecodeError:
-            data = {key: list}
-            json.dump(data, file)
-
-def load_from_json(room):
-    with open(os.path.join('PymunkPhysicsAndLevels', 'LevelData', str(room) + '.json'), 'r+') as file:
-        level_dict = json.load(file)
-        return level_dict
-
-room = 'testRoom'
-save_to_json(room, with open(os.path.join('PymunkPhysicsAndLevels', 'LevelData', str(room) + '.json'), 'r+') as file: len(str(file)), [str(Ball), 111, -123, 12])
-print(load_from_json('testRoom'))
 
 def main():
+    save_load_system.load_level('testRoom')
 
+    # TODO: when implementing level editor, make sure that objects can reference other objects, so that things like
+    #  strings will work
+    # stringOne = objects.String(ballTwo.body, ballOne.body, 25)
+    # stringTwo = objects.String(ballFour.body, ballOne.body, 40)
+    # stringThree = objects.String(ballFour.body, (200, 0), 50, "anchored")
+
+    i = 0
+    while i < 2:
+        i += 1
+        objects.BouncingCube((200, 300), (150, 300), (150, 350), (200, 350), 100000)
 
     Mx, My = pygame.mouse.get_pos()
     mouseCursorBall = objects.KinematicObject(Mx, My, 15)
@@ -108,7 +99,7 @@ def main():
         frame_tex1.release()
         frame_tex2.release()
 
-        space.step(1/fps)
+        space.step(1 / fps)
 
 
-#main()
+main()

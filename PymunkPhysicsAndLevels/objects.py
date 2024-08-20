@@ -7,18 +7,38 @@ from setup import space, display
 render_list = []
 
 class Ball:
-    def __init__(self, x, y, radius):
+    def __init__(self, x, y, radius, color=(255, 0, 0)):
         self.body = pymunk.Body()
         self.body.position = x, y
         self.shape = pymunk.Circle(self.body, radius)
         self.shape.density = 100
         self.shape.elasticity = 0.99
+        self.color = color
         space.add(self.body, self.shape)
         render_list.append(self)
 
     def draw(self):
         x, y = self.body.position
-        pygame.draw.circle(display, (255, 0, 0), (int(x), int(y)), self.shape.radius)
+        pygame.draw.circle(display, self.color, (int(x), int(y)), self.shape.radius)
+
+class BouncingCube:
+    def __init__(self, a, b, c, d, density):
+        self.cube_body = pymunk.Body()
+        self.cube_shape = pymunk.Poly(self.cube_body, [a, b, c, d])
+        self.cube_shape.density = density
+        self.cube_shape.elasticity = 0.20
+        self.cube_shape.friction = 1
+        space.add(self.cube_body, self.cube_shape)
+        render_list.append(self)
+
+    def draw(self):
+        vertices = []
+        for v in self.cube_shape.get_vertices():
+            x, y = v.rotated(self.cube_shape.body.angle) + self.cube_shape.body.position
+            vertices.append((int(x), int(y)))
+
+        pygame.draw.polygon(display, (255, 0, 255), vertices)
+
 
 class Wall:
     def __init__(self, a, b, c, d, bounce=0.8):
@@ -30,7 +50,7 @@ class Wall:
         render_list.append(self)
 
     def draw(self):
-        pygame.draw.polygon(display, (self.rect_shape.elasticity * 100, 0, 255), self.rect_shape.get_vertices())
+        pygame.draw.polygon(display, (100, 0, 255), self.rect_shape.get_vertices())
 
 class String:
     def __init__(self, body1, attachment, length, identifier="body"):
