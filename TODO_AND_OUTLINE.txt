@@ -1,0 +1,55 @@
+level saving //complete
+
+level editor: //in progress
+    should be within the project, but completely separable; no dependencies on large parts of the main.py code
+    ecosystem. following the below outline of 'three layer graphics/simulation' and the Rain World level editor, the
+    editor should have three main modes:
+                    1. the collision information and objects for the level; what pymunk uses for simulation.
+                    2. a 'selection' mode, wherein objects can be selected and physics information, shader information,
+                    and other miscellaneous values can be tweaked through the use of small context menus.
+                    3. a visual layer corresponding to the third layer of the 'three layer graphics/simulation' outline.
+
+'three layer graphics/simulation' outline: create a separation between physics and graphics, in other words make graphics toggleable:
+    three layers:
+                    1. no graphics, just simulation.
+                    2. flat-colour graphics, only displaying exactly what the main physics
+                        simulation is using to calculate collisions and such. this layer would be for level editing and
+                        debugging.
+                    3. the full art of the game; the finished product, likely pre-rendered in the level editor.
+
+fix CRT/Sine shader interaction
+reuse textures for modernGL instead of creating a new one and discarding every frame
+more robust dev tools
+creatures with procedural animation
+
+
+
+
+
+
+
+
+
+
+           )
+         ( _   _._
+          |_|-'_~_`-._
+       _.-'-_~_-~_-~-_`-._
+   _.-'_~-_~-_-~-_~_~-_~-_`-._
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    |  []  []   []   []  [] |
+    |           __    ___   |
+  ._|  []  []  | .|  [___]  |_._._._._._._._._._._._._._._._._.
+  |=|________()|__|()_______|=|=|=|=|=|=|=|=|=|=|=|=|=|=|=|=|=|
+^^^^^^^^^^^^^^^ === ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+temporary level storage:
+save_load_system.save_object('testRoom', 'Ball', [111, -123, 12])
+save_load_system.save_object('testRoom', 'Ball', [340, 123, 12])
+save_load_system.save_object('testRoom', 'Ball', [222, 123, 30])
+save_load_system.save_object('testRoom', 'Ball', [222, 123, 20])
+save_load_system.save_object('testRoom', 'Ball', [222, 123, 40])
+save_load_system.save_object('testRoom', 'Wall', [(0, 340), (400, 360), (0, 400), (400, 400)])
+save_load_system.save_object('testRoom', 'Wall', [(350, -400), (400, -400), (395, 400), (400, 400)])
+save_load_system.save_object('testRoom', 'Wall', [(0, -400), (25, -400), (0, 400), (25, 400)])
+save_load_system.save_object('testRoom', 'Wall', [(200, 300), (125, 400), (125, 400), (350, 400)])
+save_load_system.save_object('testRoom', 'Wall', [(0, -400), (0, -380), (400, -400), (400, -380)])
