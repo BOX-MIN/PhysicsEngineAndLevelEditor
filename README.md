@@ -10,3 +10,5 @@ Run main.py.
 The mouse ball will interact with the physics environment. 
 Hold space and use the arrow keys to move the ball manually.
 Press the '1' key to bring up the shader settings menu.
+
+[TODO + outline](todo.txt)
