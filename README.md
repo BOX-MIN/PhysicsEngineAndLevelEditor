@@ -1,6 +1,6 @@
 **Overview:**
 
-The goal is to make a 2D physics engine and level editor in python, using pygame and pymunk, and rendering through openGL to enable shader capabilities.
+The goal is to make a 2D physics engine and level editor in python, using pygame and pymunk, and rendering through openGL(through modernGL) to enable shader capabilities.
 The engine will also include robust support for procedural animation and creature creation, as seen in the popular survival video game Rain World.
 
 **How to use:**
@@ -13,4 +13,4 @@ Press the '1' key to bring up the shader settings menu.
 
 **Go here for more information on the project:**
 
-[TODO + outline](TODO_AND_OUTLINE.txt)
+[PROJECT OUTLINE AND TODO](TODO_AND_OUTLINE.txt)
