@@ -1,4 +1,14 @@
-PROJECT OUTLINES: -------------------------------------------------------------------------------------------------------
+ ██▀███   ▄▄▄       ██▓ ███▄    █     █     █░ ▒█████   ██▀███   ██▓    ▓█████▄     ▄████▄   ██▓     ▒█████   ███▄    █ ▓█████
+▓██ ▒ ██▒▒████▄    ▓██▒ ██ ▀█   █    ▓█░ █ ░█░▒██▒  ██▒▓██ ▒ ██▒▓██▒    ▒██▀ ██▌   ▒██▀ ▀█  ▓██▒    ▒██▒  ██▒ ██ ▀█   █ ▓█   ▀
+▓██ ░▄█ ▒▒██  ▀█▄  ▒██▒▓██  ▀█ ██▒   ▒█░ █ ░█ ▒██░  ██▒▓██ ░▄█ ▒▒██░    ░██   █▌   ▒▓█    ▄ ▒██░    ▒██░  ██▒▓██  ▀█ ██▒▒███
+▒██▀▀█▄  ░██▄▄▄▄██ ░██░▓██▒  ▐▌██▒   ░█░ █ ░█ ▒██   ██░▒██▀▀█▄  ▒██░    ░▓█▄   ▌   ▒▓▓▄ ▄██▒▒██░    ▒██   ██░▓██▒  ▐▌██▒▒▓█  ▄
+░██▓ ▒██▒ ▓█   ▓██▒░██░▒██░   ▓██░   ░░██▒██▓ ░ ████▓▒░░██▓ ▒██▒░██████▒░▒████▓    ▒ ▓███▀ ░░██████▒░ ████▓▒░▒██░   ▓██░░▒████▒
+░ ▒▓ ░▒▓░ ▒▒   ▓▒█░░▓  ░ ▒░   ▒ ▒    ░ ▓░▒ ▒  ░ ▒░▒░▒░ ░ ▒▓ ░▒▓░░ ▒░▓  ░ ▒▒▓  ▒    ░ ░▒ ▒  ░░ ▒░▓  ░░ ▒░▒░▒░ ░ ▒░   ▒ ▒ ░░ ▒░ ░
+  ░▒ ░ ▒░  ▒   ▒▒ ░ ▒ ░░ ░░   ░ ▒░     ▒ ░ ░    ░ ▒ ▒░   ░▒ ░ ▒░░ ░ ▒  ░ ░ ▒  ▒      ░  ▒   ░ ░ ▒  ░  ░ ▒ ▒░ ░ ░░   ░ ▒░ ░ ░  ░
+  ░░   ░   ░   ▒    ▒ ░   ░   ░ ░      ░   ░  ░ ░ ░ ▒    ░░   ░   ░ ░    ░ ░  ░    ░          ░ ░   ░ ░ ░ ▒     ░   ░ ░    ░
+   ░           ░  ░ ░           ░        ░        ░ ░     ░         ░  ░   ░       ░ ░          ░  ░    ░ ░           ░    ░  ░
+
+PROJECT OUTLINES: ------------------------------------------------------------------------------------------------------
 
 overall project outline: a 2d, physics based platformer engine comprised of two applications written in python:
                     1. the engine itself, capable of simulating 2d physics through the pymunk library, and displaying
@@ -43,6 +53,13 @@ level editor: //in progress
     should allow for exporting of only the JSON physics and collisions data, without taking more time to export
     graphics, to allow for quick iterative testing of mechanics and level design.
 
+more robust dev tools
+
+creatures with procedural animation and intelligent pathfinding compatible with levels:
+    a la Rain World. see tigsource Project Rain World devlogs for more information.
+
+BUGS: ------------------------------------------------------------------------------------------------------------------
+
 fix CRT/Sine shader interaction:
     ISSUE: currently, the sine wave shader warps the CRT shader effect.
     INTENDED BEHAVIOUR: the sine wave shader should be applied inside the display shape the CRT shader creates, and not
@@ -53,10 +70,6 @@ reuse textures for modernGL rendering:
         takes more processing power than is necessary.
     INTENDED BEHAVIOUR: create two openGL textures at the start of the program, and then reuse them every frame instead.
 
-more robust dev tools
-
-creatures with procedural animation and intelligent pathfinding compatible with levels:
-    a la Rain World. see tigsource Project Rain World devlogs for more information.
 
 
 
