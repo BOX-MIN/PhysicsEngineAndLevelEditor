@@ -1,8 +1,7 @@
 import pygame
 import pygame_gui
-from setup import manager
 
-update_list = []
+le_update_list = []
 
 
 class HideOnCloseUIWindow(pygame_gui.elements.UIWindow):
@@ -20,12 +19,11 @@ class Container:
             resizable=resizable,
             draggable=draggable
         )
-        print('hi')
 
 
 class HoriSlider:
     def __init__(self, X, Y, width, height, container=None, label=True, labeltext='Your text here!', startvalue=0,
-                 sliderange=(0, 10), clickincrement=1, created_from_LE=False, manager=None):
+                 sliderange=(0, 10), clickincrement=1, manager=None):
         self.slider = pygame_gui.elements.ui_horizontal_slider.UIHorizontalSlider(
             relative_rect=pygame.Rect((X, Y + height), (width, height)),
             start_value=startvalue,
@@ -42,7 +40,7 @@ class HoriSlider:
             container=container
         )
 
-        update_list.append(self)
+        le_update_list.append(self)
 
         if label:
             self.slider_label = pygame_gui.elements.ui_label.UILabel(
@@ -56,7 +54,7 @@ class HoriSlider:
         self.slider_readout.set_text(str(self.slider.get_current_value()))
 
 
-class button:
+class Button:
     def __init__(self, X, Y, width, height, text='Text', tool_tip_text=None, container=None, manager=None):
         self.button = pygame_gui.elements.ui_button.UIButton(
             relative_rect=pygame.Rect((X, Y), (width, height)),
@@ -64,4 +62,40 @@ class button:
             manager=manager,
             container=container,
             tool_tip_text=tool_tip_text
+        )
+
+class DropDownMenu:
+    def __init__(self, options_list, starting_option, x, y, width, height, manager=None, container=None):
+        self.menu = pygame_gui.elements.ui_drop_down_menu.UIDropDownMenu(
+            options_list=options_list,
+            starting_option=starting_option,
+            relative_rect=pygame.Rect((x, y), (width, height)),
+            manager=manager,
+            container=container
+        )
+
+class TextEntryLine:
+    def __init__(self, x, y, width, height, manager=None, container=None, initial_text=None, placeholder_text=None):
+        self.text_entry_line = pygame_gui.elements.ui_text_entry_line.UITextEntryLine(
+            relative_rect=pygame.Rect((x, y), (width, height)),
+            manager=manager,
+            container=container,
+            initial_text=initial_text,
+            placeholder_text=placeholder_text
+        )
+
+class VerticalScrollBar:
+    def __init__(self, x, y, width, height, visible_percentage, labeltext, manager=None, container=None):
+        self.scroll_top_label = pygame_gui.elements.ui_label.UILabel(
+            relative_rect=pygame.Rect((x, y), (width, 25)),
+            text=labeltext,
+            manager=manager,
+            container=container
+        )
+
+        self.vertical_scroll_bar = pygame_gui.elements.ui_vertical_scroll_bar.UIVerticalScrollBar(
+            relative_rect=pygame.Rect((x, y + 25), (width, height)),
+            visible_percentage=visible_percentage,
+            manager=manager,
+            container=container
         )

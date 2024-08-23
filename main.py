@@ -38,7 +38,7 @@ def handle_events():
 
 
 def main():
-    save_load_system.load_level('testRoom')
+    save_load_system.load_level('testRoom.json')
 
     # TODO: when implementing level editor, make sure that objects can reference other objects, so that things like
     #  strings will work
@@ -49,7 +49,7 @@ def main():
     i = 0
     while i < 2:
         i += 1
-        objects.BouncingCube((200, 300), (150, 300), (150, 350), (200, 350), 100000)
+        objects.BouncingCube((200, 300), (150, 300), (150, 350), (200, 350), 100000000000000000)
 
     Mx, My = pygame.mouse.get_pos()
     mouseCursorBall = objects.KinematicObject(Mx, My, 15)
