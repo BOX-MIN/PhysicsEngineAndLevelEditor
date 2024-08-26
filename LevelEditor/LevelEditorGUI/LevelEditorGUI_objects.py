@@ -85,7 +85,7 @@ class TextEntryLine:
         )
 
 class VerticalScrollBar:
-    def __init__(self, x, y, width, height, visible_percentage, labeltext, manager=None, container=None):
+    def __init__(self, x, y, width, height, start_percentage, visible_percentage, labeltext, manager=None, container=None):
         self.scroll_top_label = pygame_gui.elements.ui_label.UILabel(
             relative_rect=pygame.Rect((x, y), (width, 25)),
             text=labeltext,
@@ -98,4 +98,22 @@ class VerticalScrollBar:
             visible_percentage=visible_percentage,
             manager=manager,
             container=container
+        )
+        self.vertical_scroll_bar.set_scroll_from_start_percentage(start_percentage)
+
+class TextEntryBoxWithWindow:
+    def __init__(self, x, y, width, height, title, text, resizable=False, draggable=True, manager=None, container=None):
+        self.window = pygame_gui.elements.ui_window.UIWindow(
+            rect=pygame.Rect((x, y), (width, height)),
+            manager=manager,
+            window_display_title=str(title),
+            resizable=resizable,
+            draggable=draggable,
+        )
+
+        self.text_box = pygame_gui.elements.ui_text_entry_box.UITextEntryBox(
+            relative_rect=pygame.Rect((0, 0), (width, height - 60)),
+            initial_text=text,
+            manager=manager,
+            container=self.window
         )

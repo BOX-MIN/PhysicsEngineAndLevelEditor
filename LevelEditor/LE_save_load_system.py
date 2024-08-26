@@ -29,8 +29,6 @@ def save_object(room, class_object, parameter_list):
             save_to_json(room, key=str(1), list=[str(class_object), *parameter_list])
 
 
-# TODO: create le_setup.py file to fix circular imports issue where LE_objects is importing LE_main, LE_save_load_system
-#  is importing LE_objects, and LE_main is importing LE_save_load_system
 def load_level(room):
     level_dict = load_from_json(room)
     object_dict = {}
