@@ -20,3 +20,11 @@ speed = 1
 grid_size = 20
 
 clipboard = []
+
+input_mode = 'collisions/object placement'
+
+show_object_menu = True
+
+show_selection_filters = True
+
+object_menu_width = 200

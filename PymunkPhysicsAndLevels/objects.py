@@ -9,12 +9,12 @@ from setup import space, display
 render_list = []
 
 class Ball:
-    def __init__(self, x, y, radius, color=(255, 0, 0)):
+    def __init__(self, x, y, radius, color=(255, 0, 0), density=100, elasticity=0.99):
         self.body = pymunk.Body()
         self.body.position = x, y
         self.shape = pymunk.Circle(self.body, radius)
-        self.shape.density = 100
-        self.shape.elasticity = 0.99
+        self.shape.density = density
+        self.shape.elasticity = elasticity
         self.color = color
         space.add(self.body, self.shape)
         render_list.append(self)
@@ -26,12 +26,13 @@ class Ball:
         pygame.draw.circle(display, self.color, (int(x), int(y)), self.shape.radius)
 
 class BouncingCube:
-    def __init__(self, a, b, c, d, density):
+    def __init__(self, a, b, c, d, density, elasticity=0.20, friction=1, color=(255, 0, 255)):
         self.cube_body = pymunk.Body()
         self.cube_shape = pymunk.Poly(self.cube_body, [a, b, c, d])
         self.cube_shape.density = density
-        self.cube_shape.elasticity = 0.20
-        self.cube_shape.friction = 1
+        self.cube_shape.elasticity = elasticity
+        self.cube_shape.friction = friction
+        self.color = color
         space.add(self.cube_body, self.cube_shape)
         render_list.append(self)
 
@@ -41,7 +42,7 @@ class BouncingCube:
             x, y = v.rotated(self.cube_shape.body.angle) + self.cube_shape.body.position
             vertices.append((int(x + setup.camx), int(y + setup.camy)))
 
-        pygame.draw.polygon(display, (255, 0, 255), vertices)
+        pygame.draw.polygon(display, self.color, vertices)
 
 
 class Wall:

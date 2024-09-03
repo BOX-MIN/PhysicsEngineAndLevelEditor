@@ -28,6 +28,7 @@ file_renamer_button = LevelEditorGUI_objects.Button(
     text='Rename',
     manager=le_ui_manager
 )
+
 def load_file_loader_dropdown():
     file_to_set = filename.text_entry_line.get_text()
     global file_loader_list
@@ -74,19 +75,22 @@ def load_json_window():
 
 '''right hand side elements'''
 def rightHandElements(window_size):
-    """exporting settings"""
     x, y = window_size
+    if LevelEditor.LE_setup.show_object_menu is True or LevelEditor.LE_setup.show_selection_filters is True:
+        x = x - LevelEditor.LE_setup.object_menu_width
+
+    """exporting settings"""
     global export_settings_dropdown
     export_settings_dropdown = LevelEditorGUI_objects.DropDownMenu(
         ['JSON', 'Graphics', 'JSON and Graphics'],
         'JSON and Graphics',
-        x - 250, 0, 175, 25,
+        LevelEditor.LE_setup.le_display.width - 250, 0, 175, 25,
         manager=le_ui_manager
     )
 
     global export_button
     export_button = LevelEditorGUI_objects.Button(
-        x - 75, 0, 75, 25,
+        LevelEditor.LE_setup.le_display.width - 75, 0, 75, 25,
         text='Export',
         manager=le_ui_manager
     )
@@ -108,11 +112,73 @@ def rightHandElements(window_size):
     )
     global json_display_button
     json_display_button = LevelEditorGUI_objects.Button(
-        x - 335, 0, 85, 25,
+        LevelEditor.LE_setup.le_display.width - 335, 0, 85, 25,
         text='View JSON',
         manager=le_ui_manager
     )
 
+    if LevelEditor.LE_setup.show_object_menu is True:
+        '''object menu for placement'''
+        global object_menu_window
+        object_menu_window = LevelEditorGUI_objects.Container(
+            LevelEditor.LE_setup.le_display.width - LevelEditor.LE_setup.object_menu_width,
+            25, LevelEditor.LE_setup.object_menu_width, (y / 2) - 25,
+            title='Objects',
+            resizable=False,
+            draggable=False,
+            manager=le_ui_manager
+        )
+
+        global ball_object_button
+        ball_object_button = LevelEditorGUI_objects.Button(
+            5, 5, LevelEditor.LE_setup.object_menu_width - 10, 25,
+            text='Spawn Ball',
+            container=object_menu_window.container,
+            manager=le_ui_manager
+        )
+
+        global wall_object_button
+        wall_object_button = LevelEditorGUI_objects.Button(
+            5, 35, LevelEditor.LE_setup.object_menu_width - 10, 25,
+            text='Spawn Wall',
+            container=object_menu_window.container,
+            manager=le_ui_manager
+        )
+
+        global bouncingcube_object_button
+        bouncingcube_object_button = LevelEditorGUI_objects.Button(
+            5, 65, LevelEditor.LE_setup.object_menu_width - 10, 25,
+            text='Spawn Bouncing Cube',
+            container=object_menu_window.container,
+            manager=le_ui_manager
+        )
+
+        global string_object_button
+        string_object_button = LevelEditorGUI_objects.Button(
+            5, 95, LevelEditor.LE_setup.object_menu_width - 10, 25,
+            text='Spawn String',
+            container=object_menu_window.container,
+            manager=le_ui_manager
+        )
+    if LevelEditor.LE_setup.show_selection_filters is True:
+        '''selection filter window'''
+        global selection_filter_window
+        selection_filter_window = LevelEditorGUI_objects.Container(
+            LevelEditor.LE_setup.le_display.width - LevelEditor.LE_setup.object_menu_width,
+            y / 2, LevelEditor.LE_setup.object_menu_width, y / 2,
+            title='Selection Filter',
+            resizable=False,
+            draggable=False,
+            manager=le_ui_manager
+        )
+        global selection_list
+        selection_list = LevelEditorGUI_objects.SelectionList(
+            5, 5, LevelEditor.LE_setup.object_menu_width - 10, y / 2 - 40,
+            item_list=['Balls', 'Walls', 'Bouncing Cubes'],
+            initial_selected_items=['Balls', 'Walls', 'Bouncing Cubes'],
+            manager=le_ui_manager,
+            container=selection_filter_window.container
+        )
 
 rightHandElements(pygame.display.get_window_size())
 
@@ -124,4 +190,7 @@ def killRightHandElements():
     export_button.button.kill()
     export_settings_dropdown.menu.kill()
     json_display_button.button.kill()
+    object_menu_window.container.kill()
+    selection_filter_window.container.kill()
+
 

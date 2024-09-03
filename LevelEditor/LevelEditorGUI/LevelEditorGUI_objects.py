@@ -10,15 +10,25 @@ class HideOnCloseUIWindow(pygame_gui.elements.UIWindow):
 
 
 class Container:
-    def __init__(self, x, y, width, height, title='container', resizable=False, draggable=True, manager=None):
-        self.container = HideOnCloseUIWindow(
-            rect=pygame.Rect((x, y), (width, height)),
-            manager=manager,
-            window_display_title=title,
-            element_id=str(self),
-            resizable=resizable,
-            draggable=draggable
-        )
+    def __init__(self, x, y, width, height, title='container', resizable=False, draggable=True, manager=None, hideonclose=True):
+        if hideonclose is True:
+            self.container = HideOnCloseUIWindow(
+                rect=pygame.Rect((x, y), (width, height)),
+                manager=manager,
+                window_display_title=title,
+                element_id=str(self),
+                resizable=resizable,
+                draggable=draggable
+            )
+        else:
+            self.container = pygame_gui.elements.UIWindow(
+                rect=pygame.Rect((x, y), (width, height)),
+                manager=manager,
+                window_display_title=title,
+                element_id=str(self),
+                resizable=resizable,
+                draggable=draggable
+            )
 
 
 class HoriSlider:
@@ -34,7 +44,7 @@ class HoriSlider:
         )
 
         self.slider_readout = pygame_gui.elements.ui_label.UILabel(
-            relative_rect=pygame.Rect((X + width, Y + height), (width / 5, height)),
+            relative_rect=pygame.Rect((X + width, Y + height), (width / 3, height)),
             text=str(startvalue),
             manager=manager,
             container=container
@@ -117,3 +127,35 @@ class TextEntryBoxWithWindow:
             manager=manager,
             container=self.window
         )
+
+class ColorPickerWindow:
+    def __init__(self, x, y, width, height, manager=None, initial_color=(0, 0, 0), title='Colour Selector'):
+        self.picker_window = pygame_gui.windows.ui_colour_picker_dialog.UIColourPickerDialog(
+            rect=pygame.Rect((x, y), (width, height)),
+            manager=manager,
+            initial_colour=initial_color,
+            window_title=title,
+        )
+
+class SelectionList:
+    def __init__(self, x, y, width, height, item_list, initial_selected_items, manager=None, multi_select=True, container=None):
+        self.list = pygame_gui.elements.ui_selection_list.UISelectionList(
+            relative_rect=pygame.Rect((x, y), (width, height)),
+            item_list=item_list,
+            default_selection=initial_selected_items,
+            manager=manager,
+            allow_multi_select=multi_select,
+            container=container
+        )
+
+
+
+
+
+
+
+
+
+
+
+

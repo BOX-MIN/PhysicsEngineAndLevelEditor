@@ -24,21 +24,39 @@ rect_tuple_to_move = 'none'
 def touching_object():
     for i in LE_objects.render_list:
         if i.check_mouse_touching(LevelEditorGUI_manager.zoomer.vertical_scroll_bar.scroll_position) is True:
-            return i
+            filter_list = LevelEditorGUI_manager.selection_list.list.get_multi_selection()
+            if i.type in filter_list:
+                return i
+            else:
+                pass
     return None
 
 def touching_corner_of_polygon():
+
     for i in LE_objects.render_list:
-        try:
-            coords = i.mouse_touching_corner(LevelEditorGUI_manager.zoomer.vertical_scroll_bar.scroll_position)
-            if coords is not False:
-                return i, coords  # returns tuple
-        except AttributeError:
-            pass
+        filter_list = LevelEditorGUI_manager.selection_list.list.get_multi_selection()
+        if i.type in filter_list:
+            try:
+                coords = i.mouse_touching_corner(LevelEditorGUI_manager.zoomer.vertical_scroll_bar.scroll_position)
+                if coords is not False:
+                    return i, coords  # returns tuple
+            except AttributeError:
+                pass
 
     return None
 
 
+def mouse_events_selection_mode(event):
+    if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[2] is True:
+        object_touched = touching_object()
+        object_touched.create_personal_gui()
+    if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[1] is True:
+        LE_setup.input_mode = 'collisions/object placement'
+        for i in LE_objects.render_list:
+            try:
+                i.properties_window.container.kill()
+            except AttributeError:
+                pass
 
 def mouse_events_collisions_mode(event):
     # here is where to check if clicking on an object
@@ -80,12 +98,12 @@ def mouse_events_collisions_mode(event):
         key = pygame.key.get_pressed()
         if key[K_DELETE] or key[K_d]:
             LE_objects.render_list.remove(object_touched)
-        if key[K_c]:
+        elif key[K_c]:
             LE_setup.clipboard.append(object_touched.get_save_info())
-        if key[K_x]:
+        elif key[K_x]:
             LE_setup.clipboard.append(object_touched.get_save_info())
             LE_objects.render_list.remove(object_touched)
-        if key[K_v]:
+        elif key[K_v]:
             LE_save_load_system.save_level(LevelEditorGUI_manager.filename.text_entry_line.get_text())
             LE_save_load_system.save_object(
                 LevelEditorGUI_manager.filename.text_entry_line.get_text(),
@@ -94,6 +112,11 @@ def mouse_events_collisions_mode(event):
             )
             LE_objects.render_list = []
             LE_save_load_system.load_level(LevelEditorGUI_manager.filename.text_entry_line.get_text())
+        else:
+            if object_touched is not None:
+                object_touched.create_personal_gui()
+                LE_setup.input_mode = 'selection and editing'
+
 
 
     if event.type == pygame.MOUSEMOTION:
@@ -222,7 +245,59 @@ def mouse_events_collisions_mode(event):
 
 
 def le_controls(event):
-    mouse_events_collisions_mode(event)
+    if LE_setup.input_mode == 'collisions/object placement':
+        mouse_events_collisions_mode(event)
+        if event.type == pygame_gui.UI_BUTTON_PRESSED:
+            try:
+                if LevelEditorGUI_manager.ball_object_button.button.check_pressed():
+                    LE_save_load_system.save_level(LevelEditorGUI_manager.filename.text_entry_line.get_text())
+                    LE_save_load_system.save_object(
+                        LevelEditorGUI_manager.filename.text_entry_line.get_text(),
+                        'Ball',
+                        [300 - LE_setup.xPos, 300 - LE_setup.yPos, 30, (220, 0, 0), 120, 0.99]
+                    )
+                    LE_objects.render_list = []
+                    LE_save_load_system.load_level(LevelEditorGUI_manager.filename.text_entry_line.get_text())
+
+                if LevelEditorGUI_manager.wall_object_button.button.check_pressed():
+                    LE_save_load_system.save_level(LevelEditorGUI_manager.filename.text_entry_line.get_text())
+                    LE_save_load_system.save_object(
+                        LevelEditorGUI_manager.filename.text_entry_line.get_text(),
+                        'Wall',
+                        [[300 - LE_setup.xPos, 300 - LE_setup.yPos],
+                         [300 - LE_setup.xPos, 400 - LE_setup.yPos],
+                         [400 - LE_setup.xPos, 400 - LE_setup.yPos],
+                         [400 - LE_setup.xPos, 300 - LE_setup.yPos]]
+                    )
+                    LE_objects.render_list = []
+                    LE_save_load_system.load_level(LevelEditorGUI_manager.filename.text_entry_line.get_text())
+
+                if LevelEditorGUI_manager.bouncingcube_object_button.button.check_pressed():
+                    LE_save_load_system.save_level(LevelEditorGUI_manager.filename.text_entry_line.get_text())
+                    LE_save_load_system.save_object(
+                        LevelEditorGUI_manager.filename.text_entry_line.get_text(),
+                        'BouncingCube',
+                        [[300 - LE_setup.xPos, 300 - LE_setup.yPos],
+                         [300 - LE_setup.xPos, 350 - LE_setup.yPos],
+                         [350 - LE_setup.xPos, 350 - LE_setup.yPos],
+                         [350 - LE_setup.xPos, 300 - LE_setup.yPos], 10000]
+                    )
+                    LE_objects.render_list = []
+                    LE_save_load_system.load_level(LevelEditorGUI_manager.filename.text_entry_line.get_text())
+
+                if LevelEditorGUI_manager.string_object_button.button.check_pressed():
+                    raise Exception('object hasn\'t yet been implemented in the save/load system')
+
+            except AttributeError:
+                pass
+
+    elif LE_setup.input_mode == 'selection and editing':
+        mouse_events_selection_mode(event)
+        for i in LE_objects.render_list:
+            try:
+                i.update_values_from_personal_gui()
+            except AttributeError:
+                pass
 
     if event.type == QUIT:
         pygame.quit()
@@ -289,7 +364,6 @@ def le_controls(event):
                 LevelEditorGUI_manager.rightHandElements(pygame.display.get_window_size())
 
 
-
 def LEMain():
     while True:
         """filling the screen before rendering"""
@@ -327,8 +401,6 @@ def LEMain():
         for i in LevelEditorGUI_objects.le_update_list:
             i.update_readout()
 
-
-
         """rendering objects to a Surface"""
         scroll_position = LevelEditorGUI_manager.zoomer.vertical_scroll_bar.scroll_position
 
@@ -339,14 +411,16 @@ def LEMain():
         LE_setup.le_display.blit(LE_setup.le_screen)
 
         LE_setup.le_display.fill((189, 189, 189), ((0, 0), (LE_setup.le_display.width, 25)))
-        LE_setup.le_display.fill((189, 189, 189), ((LE_setup.le_display.width - 25, 0), (25, LE_setup.le_display.height)))
-        LE_setup.le_display.fill((90, 90, 90), ((LE_setup.le_display.width - 25, 50), (25, 275)))
+        if LE_setup.show_object_menu is True:
+            LE_setup.le_display.fill((189, 189, 189), ((LE_setup.le_display.width - 25 - LE_setup.object_menu_width, 0), (25, LE_setup.le_display.height)))
+            LE_setup.le_display.fill((90, 90, 90), ((LE_setup.le_display.width - 25 - LE_setup.object_menu_width, 50), (25, 275)))
+        else:
+            LE_setup.le_display.fill((189, 189, 189), ((LE_setup.le_display.width - 25, 0), (25, LE_setup.le_display.height)))
+            LE_setup.le_display.fill((90, 90, 90), ((LE_setup.le_display.width - 25, 50), (25, 275)))
 
         LevelEditorGUI_manager.le_ui_manager.draw_ui(LE_setup.le_display)
 
         pygame.display.flip()
-
-
 
 
 LEMain()
