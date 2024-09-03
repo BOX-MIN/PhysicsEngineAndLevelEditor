@@ -46,7 +46,7 @@ def kill_file_loader_dropdown():
 load_file_loader_dropdown()
 
 file_loader_button = LevelEditorGUI_objects.Button(
-    625, 0, 100, 25,
+    625, 0, 110, 25,
     text='Load from File',
     manager=le_ui_manager
 )
@@ -55,7 +55,7 @@ def load_json_window():
     file_to_load = file_loader_list.menu.selected_option[0]
     with open(os.path.join('..', 'PymunkPhysicsAndLevels', 'LevelData', str(file_to_load)), 'r+') as file:
         text_to_display = str(json.load(file))
-
+    text_to_display = text_to_display.replace("], '", "],\n '")
     window_height = 600
     global json_window
     json_window = LevelEditorGUI_objects.TextEntryBoxWithWindow(
@@ -66,8 +66,8 @@ def load_json_window():
     )
     global json_window_save_button
     json_window_save_button = LevelEditorGUI_objects.Button(
-        5, window_height - 58, 210, 25,
-        text='Save changes to file and load',
+        5, window_height - 58, 260, 25,
+        text='Save changes to file and export JSON',
         container=json_window.window,
         manager=le_ui_manager
     )
@@ -108,7 +108,7 @@ def rightHandElements(window_size):
     )
     global json_display_button
     json_display_button = LevelEditorGUI_objects.Button(
-        x - 325, 0, 75, 25,
+        x - 335, 0, 85, 25,
         text='View JSON',
         manager=le_ui_manager
     )

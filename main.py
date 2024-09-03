@@ -38,7 +38,7 @@ def handle_events():
 
 
 def main():
-    save_load_system.load_level('testRoom.json')
+    save_load_system.load_level('jasooon.json')
 
     # TODO: when implementing level editor, make sure that objects can reference other objects, so that things like
     #  strings will work
@@ -58,6 +58,19 @@ def main():
         handle_events()
 
         mouseCursorBall.move(200)
+
+        # temporary camera controls
+        key = pygame.key.get_pressed()
+        if key[K_SPACE]:
+            pass
+        elif key[K_RIGHT]:
+            setup.camx += -camspeed
+        elif key[K_LEFT]:
+            setup.camx += camspeed
+        elif key[K_UP]:
+            setup.camy += camspeed
+        elif key[K_DOWN]:
+            setup.camy += -camspeed
 
         """pygame_GUI stuff"""
         for i in GUI_objects.update_list:

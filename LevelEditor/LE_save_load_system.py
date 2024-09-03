@@ -28,6 +28,14 @@ def save_object(room, class_object, parameter_list):
         except json.decoder.JSONDecodeError:
             save_to_json(room, key=str(1), list=[str(class_object), *parameter_list])
 
+def save_level(room):
+    open(os.path.join('..', 'PymunkPhysicsAndLevels', 'LevelData', str(room)), 'w').close()
+    counter = 0
+    for i in LE_objects.render_list:
+        counter += 1
+        save_info = i.get_save_info()
+        save_to_json(room, key=str(counter), list=save_info)
+
 
 def load_level(room):
     level_dict = load_from_json(room)

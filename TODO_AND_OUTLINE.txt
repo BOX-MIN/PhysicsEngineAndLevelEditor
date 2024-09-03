@@ -34,12 +34,15 @@ overall project outline: a 2d, physics based platformer engine comprised of two 
 
 level editor collision mode controls outline:
     control  ->  planned usage:
-                    l-mouse         ->      panning, if not clicking on an object; moving an object/resizing it.
-                    r-mouse + del   ->      erase an object.
-                    r-mouse + c     ->      copy an object.
-                    r-mouse + x     ->      cut(erase and copy) an object.
-                    r-mouse + v     ->      paste an object.
-                    scroll wheel    ->      zoom in/out
+                    lmb             ->      panning, if not clicking on an object; moving an object/resizing it. [DONE]
+                    rmb             ->      brings up the object in Selection and Editing mode.
+                    rmb + del or d  ->      erase an object. [DONE]
+                    rmb + c         ->      copy an object. [DONE]
+                    rmb + x         ->      cut(erase and copy) an object. [DONE]
+                    rmb + v         ->      paste an object. [DONE]
+                    scroll wheel    ->      zoom in/out [NOT HAPPENING]
+    every time a new object is created, the level saves to JSON and is reloaded, but this is not the case for object
+    deletion or object movement, as a sort of rudimentary back button.
 
 
 T0D0 LIST: -------------------------------------------------------------------------------------------------------------

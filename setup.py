@@ -17,5 +17,9 @@ manager = pygame_gui.UIManager(pygame.display.get_window_size())
 
 time = 0        # for shaders
 
+camx = 0
+camy = 0
+camspeed = 4
+
 
 

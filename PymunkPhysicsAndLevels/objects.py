@@ -2,6 +2,8 @@ import pymunk
 from pymunk import constraints
 import pygame
 from pygame import *
+
+import setup
 from setup import space, display
 
 render_list = []
@@ -19,6 +21,8 @@ class Ball:
 
     def draw(self):
         x, y = self.body.position
+        x = x + setup.camx
+        y = y + setup.camy
         pygame.draw.circle(display, self.color, (int(x), int(y)), self.shape.radius)
 
 class BouncingCube:
@@ -35,7 +39,7 @@ class BouncingCube:
         vertices = []
         for v in self.cube_shape.get_vertices():
             x, y = v.rotated(self.cube_shape.body.angle) + self.cube_shape.body.position
-            vertices.append((int(x), int(y)))
+            vertices.append((int(x + setup.camx), int(y + setup.camy)))
 
         pygame.draw.polygon(display, (255, 0, 255), vertices)
 
@@ -50,7 +54,12 @@ class Wall:
         render_list.append(self)
 
     def draw(self):
-        pygame.draw.polygon(display, (100, 0, 255), self.rect_shape.get_vertices())
+        vertices = []
+        for v in self.rect_shape.get_vertices():
+            x, y = v
+            vertices.append((int(x + setup.camx), int(y + setup.camy)))
+
+        pygame.draw.polygon(display, (100, 0, 255), vertices)
 
 class String:
     def __init__(self, body1, attachment, length, identifier="body"):
@@ -79,10 +88,14 @@ class KinematicObject:
 
     def draw(self):
         x, y = self.body.position
+        x = x + setup.camx
+        y = y + setup.camy
         pygame.draw.circle(display, (0, 255, 0), (int(x), int(y)), self.shape.radius)
 
     def move(self, speed=80):
         x, y = self.body.position
+        x = x + setup.camx
+        y = y + setup.camy
         x2, y2 = pygame.mouse.get_pos()
         key = pygame.key.get_pressed()
         if not key[K_SPACE]:

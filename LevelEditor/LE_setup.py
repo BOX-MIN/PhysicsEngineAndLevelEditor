@@ -17,3 +17,6 @@ yVel = 0
 friction = 0.9
 speed = 1
 
+grid_size = 20
+
+clipboard = []
