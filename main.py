@@ -38,6 +38,7 @@ def handle_events():
 
 
 def main():
+    waterone = objects.PreWaterObject(200, 0, 100, 100, 0.01, 0.1, 3, 20, False)
     save_load_system.load_level('ballcascades.json')
 
     # TODO: when implementing level editor, make sure that objects can reference other objects, so that things like

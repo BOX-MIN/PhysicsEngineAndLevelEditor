@@ -1,10 +1,25 @@
 import pygame_gui
 import pymunk
 import pygame
+import math
 
 space = pymunk.Space()
 space.gravity = (0, 1000)
 space.damping = 0.59
+
+def fluid_sim_collide(arbiter, space, data):
+    fluid_sim_force = 100
+    body1 = arbiter.shapes[0].body
+    body2 = arbiter.shapes[1].body
+
+    distance = math.sqrt((body1.position[0] - body2.position[0]) ** 2 + (body1.position[1] - body2.position[1]) ** 2)
+
+    body1.apply_impulse_at_local_point((0, fluid_sim_force))
+    body2.apply_impulse_at_local_point((0, fluid_sim_force))
+    return True
+
+fluid_sim_collision_handler = space.add_collision_handler(3, 3)
+#fluid_sim_collision_handler.pre_solve = fluid_sim_collide
 
 pygame.init()
 clock = pygame.time.Clock()

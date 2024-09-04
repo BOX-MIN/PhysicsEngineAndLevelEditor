@@ -174,8 +174,8 @@ def rightHandElements(window_size):
         global selection_list
         selection_list = LevelEditorGUI_objects.SelectionList(
             5, 5, LevelEditor.LE_setup.object_menu_width - 10, y / 2 - 40,
-            item_list=['Balls', 'Walls', 'Bouncing Cubes'],
-            initial_selected_items=['Balls', 'Walls', 'Bouncing Cubes'],
+            item_list=['Enable Shape Detection', 'Enable Corner Detection', 'Balls', 'Walls', 'Bouncing Cubes'],
+            initial_selected_items=['Enable Shape Detection', 'Enable Corner Detection', 'Balls', 'Walls', 'Bouncing Cubes'],
             manager=le_ui_manager,
             container=selection_filter_window.container
         )

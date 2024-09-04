@@ -1,3 +1,5 @@
+import random
+
 import pymunk
 from pymunk import constraints
 import pygame
@@ -111,3 +113,65 @@ class KinematicObject:
             self.body.velocity = 0, speed
         else:
             self.body.velocity = 0, 0
+
+class WaterParticle:
+    def __init__(self, x, y, radius, density, elasticity, self_collision, color=(0, 255, 255)):
+        self.body = pymunk.Body()
+        self.body.position = x, y
+        self.shape = pymunk.Circle(self.body, radius)
+        self.shape.density = density
+        self.shape.elasticity = elasticity
+        self.color = color
+        if self_collision is False:
+            self.shape.collision_type = 3
+        space.add(self.body, self.shape)
+        render_list.append(self)
+
+    def draw(self):
+        x, y = self.body.position
+        x = x + setup.camx
+        y = y + setup.camy
+        pygame.draw.circle(display, self.color, (int(x), int(y)), self.shape.radius)
+
+class PreWaterObject:
+    def __init__(self, x, y, width, height, dpp, epp, dop, aopphpa, self_collision=False):
+        self.rect = [(x, y), (x + width, y), (x + width, y + height), (x, y + height)]
+        self.rect_area = width * height
+        self.rect_ratio = width/height
+        self.density_per_particle = dpp
+        self.elasticity_per_particle = epp
+        self.density_of_particles = dop
+        self.amount_of_particles_per_hundred_pixels_area = aopphpa
+        self.amount_of_particles = (self.rect_area / 100) * self.amount_of_particles_per_hundred_pixels_area
+        for i in range(int(self.amount_of_particles)):
+            WaterParticle(random.randint(x, x + width), random.randint(y, y + height),
+                          self.density_of_particles,
+                          self.density_per_particle,
+                          self.elasticity_per_particle,
+                          self_collision
+                          )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

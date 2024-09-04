@@ -22,28 +22,36 @@ corner_clicked = False  # for mouse_events
 rect_tuple_to_move = 'none'
 
 def touching_object():
-    for i in LE_objects.render_list:
-        if i.check_mouse_touching(LevelEditorGUI_manager.zoomer.vertical_scroll_bar.scroll_position) is True:
-            filter_list = LevelEditorGUI_manager.selection_list.list.get_multi_selection()
-            if i.type in filter_list:
-                return i
-            else:
-                pass
-    return None
+    filter_list = LevelEditorGUI_manager.selection_list.list.get_multi_selection()
+    if 'Enable Shape Detection' in filter_list:
+        for i in LE_objects.render_list:
+            if i.check_mouse_touching(LevelEditorGUI_manager.zoomer.vertical_scroll_bar.scroll_position) is True:
+                if i.type in filter_list:
+                    return i
+                else:
+                    pass
+
+        return None
+
+    else:
+        return None
 
 def touching_corner_of_polygon():
+    filter_list = LevelEditorGUI_manager.selection_list.list.get_multi_selection()
+    if 'Enable Corner Detection' in filter_list:
+        for i in LE_objects.render_list:
+            if i.type in filter_list:
+                try:
+                    coords = i.mouse_touching_corner(LevelEditorGUI_manager.zoomer.vertical_scroll_bar.scroll_position)
+                    if coords is not False:
+                        return i, coords  # returns tuple
+                except AttributeError:
+                    pass
 
-    for i in LE_objects.render_list:
-        filter_list = LevelEditorGUI_manager.selection_list.list.get_multi_selection()
-        if i.type in filter_list:
-            try:
-                coords = i.mouse_touching_corner(LevelEditorGUI_manager.zoomer.vertical_scroll_bar.scroll_position)
-                if coords is not False:
-                    return i, coords  # returns tuple
-            except AttributeError:
-                pass
+        return None
 
-    return None
+    else:
+        return None
 
 
 def mouse_events_selection_mode(event):
@@ -96,24 +104,27 @@ def mouse_events_collisions_mode(event):
     elif event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[2] is True:
         object_touched = touching_object()
         key = pygame.key.get_pressed()
-        if key[K_DELETE] or key[K_d]:
-            LE_objects.render_list.remove(object_touched)
-        elif key[K_c]:
-            LE_setup.clipboard.append(object_touched.get_save_info())
-        elif key[K_x]:
-            LE_setup.clipboard.append(object_touched.get_save_info())
-            LE_objects.render_list.remove(object_touched)
-        elif key[K_v]:
-            LE_save_load_system.save_level(LevelEditorGUI_manager.filename.text_entry_line.get_text())
-            LE_save_load_system.save_object(
-                LevelEditorGUI_manager.filename.text_entry_line.get_text(),
-                LE_setup.clipboard[-1][0],
-                LE_setup.clipboard[-1][1:]
-            )
-            LE_objects.render_list = []
-            LE_save_load_system.load_level(LevelEditorGUI_manager.filename.text_entry_line.get_text())
-        else:
-            if object_touched is not None:
+        if key[K_v]:
+            try:
+                LE_save_load_system.save_level(LevelEditorGUI_manager.filename.text_entry_line.get_text())
+                LE_save_load_system.save_object(
+                    LevelEditorGUI_manager.filename.text_entry_line.get_text(),
+                    LE_setup.clipboard[-1][0],
+                    LE_setup.clipboard[-1][1:]
+                )
+                LE_objects.render_list = []
+                LE_save_load_system.load_level(LevelEditorGUI_manager.filename.text_entry_line.get_text())
+            except IndexError:
+                pass
+        if object_touched is not None:
+            if key[K_DELETE] or key[K_d]:
+                LE_objects.render_list.remove(object_touched)
+            elif key[K_c]:
+                LE_setup.clipboard.append(object_touched.get_save_info())
+            elif key[K_x]:
+                LE_setup.clipboard.append(object_touched.get_save_info())
+                LE_objects.render_list.remove(object_touched)
+            else:
                 object_touched.create_personal_gui()
                 LE_setup.input_mode = 'selection and editing'
 
