@@ -38,7 +38,7 @@ def handle_events():
 
 
 def main():
-    waterone = objects.PreWaterObject(200, 0, 100, 100, 50, 0, 1, 5, False)
+    waterone = objects.PreWaterObject(200, 0, 100, 100, 50, 0, 2, 4, True)
     save_load_system.load_level('ballcascades.json')
 
     # TODO: when implementing level editor, make sure that objects can reference other objects, so that things like
@@ -109,6 +109,7 @@ def main():
         frame_tex2.release()
 
         space.step(1 / fps)
+        print(clock.get_fps())
 
 
 main()

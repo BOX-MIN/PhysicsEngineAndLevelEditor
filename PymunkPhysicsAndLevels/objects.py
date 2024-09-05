@@ -10,7 +10,6 @@ import setup
 from setup import space, display
 
 render_list = []
-water_particle_list = []
 
 class Ball:
     def __init__(self, x, y, radius, color=(255, 0, 0), density=100, elasticity=0.99):
@@ -116,14 +115,8 @@ class KinematicObject:
         else:
             self.body.velocity = 0, 0
 
-def SmoothingKernel(radius, distance):
-    volume = math.pi * (radius ** 8) / 4
-    value = max(0, radius * radius - distance * distance)
-    return value * value * value / volume
-
-
 class WaterParticle:
-    def __init__(self, x, y, radius, density, elasticity, self_collision, color=(0, 255, 255)):
+    def __init__(self, x, y, radius, density, elasticity, custom_collision, radius_overflow=4, color=(0, 255, 255)):
         self.body = pymunk.Body()
         self.body.position = x, y
         self.shape = pymunk.Circle(self.body, radius)
@@ -131,34 +124,20 @@ class WaterParticle:
         self.shape.elasticity = elasticity
         self.particle_density = 0
         self.color = color
-        if self_collision is False:
+        self.radius_overflow = radius_overflow
+        if custom_collision is True:
             self.shape.collision_type = 3
         space.add(self.body, self.shape)
         render_list.append(self)
-        water_particle_list.append(self)
-
-    def calculate_density(self):
-        self.particle_density = 0
-
-        # mass of each different particle, not this one, but they all should be the same
-        mass = self.shape.mass
-
-        for water_object_instance in water_particle_list:
-            position = water_object_instance.body.position
-            distance = math.dist(position, self.body.position)
-            influence = SmoothingKernel(self.shape.radius, distance)
-            self.particle_density += mass * influence
-
-
 
     def draw(self):
         x, y = self.body.position
         x = x + setup.camx
         y = y + setup.camy
-        pygame.draw.circle(display, self.color, (int(x), int(y)), self.shape.radius)
+        pygame.draw.circle(display, self.color, (int(x), int(y)), self.shape.radius + self.radius_overflow)
 
 class PreWaterObject:
-    def __init__(self, x, y, width, height, dpp, epp, dop, aopphpa, self_collision=False):
+    def __init__(self, x, y, width, height, dpp, epp, dop, aopphpa, custom_collision=False):
         self.rect = [(x, y), (x + width, y), (x + width, y + height), (x, y + height)]
         self.rect_area = width * height
         self.rect_ratio = width/height
@@ -172,7 +151,7 @@ class PreWaterObject:
                           self.density_of_particles,
                           self.density_per_particle,
                           self.elasticity_per_particle,
-                          self_collision
+                          custom_collision
                           )
 
 

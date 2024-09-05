@@ -17,8 +17,8 @@ def fluid_sim_collide(arbiter, space, data):
     if distance == 0:
         distance += 0.1
 
-    body1.apply_impulse_at_local_point((fluid_sim_force, 0))
-    body2.apply_impulse_at_local_point((-(fluid_sim_force), 0))
+    body1.apply_impulse_at_local_point((0, fluid_sim_force))
+    body2.apply_impulse_at_local_point((0, fluid_sim_force))
     return True
 
 fluid_sim_collision_handler = space.add_collision_handler(3, 3)
