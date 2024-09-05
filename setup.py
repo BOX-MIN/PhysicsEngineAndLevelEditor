@@ -14,12 +14,15 @@ def fluid_sim_collide(arbiter, space, data):
 
     distance = math.sqrt((body1.position[0] - body2.position[0]) ** 2 + (body1.position[1] - body2.position[1]) ** 2)
 
-    body1.apply_impulse_at_local_point((0, fluid_sim_force))
-    body2.apply_impulse_at_local_point((0, fluid_sim_force))
+    if distance == 0:
+        distance += 0.1
+
+    body1.apply_impulse_at_local_point((fluid_sim_force, 0))
+    body2.apply_impulse_at_local_point((-(fluid_sim_force), 0))
     return True
 
 fluid_sim_collision_handler = space.add_collision_handler(3, 3)
-#fluid_sim_collision_handler.pre_solve = fluid_sim_collide
+fluid_sim_collision_handler.pre_solve = fluid_sim_collide
 
 pygame.init()
 clock = pygame.time.Clock()

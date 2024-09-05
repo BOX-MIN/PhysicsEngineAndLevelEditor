@@ -1,3 +1,4 @@
+import math
 import random
 
 import pymunk
@@ -9,6 +10,7 @@ import setup
 from setup import space, display
 
 render_list = []
+water_particle_list = []
 
 class Ball:
     def __init__(self, x, y, radius, color=(255, 0, 0), density=100, elasticity=0.99):
@@ -114,6 +116,12 @@ class KinematicObject:
         else:
             self.body.velocity = 0, 0
 
+def SmoothingKernel(radius, distance):
+    volume = math.pi * (radius ** 8) / 4
+    value = max(0, radius * radius - distance * distance)
+    return value * value * value / volume
+
+
 class WaterParticle:
     def __init__(self, x, y, radius, density, elasticity, self_collision, color=(0, 255, 255)):
         self.body = pymunk.Body()
@@ -121,11 +129,27 @@ class WaterParticle:
         self.shape = pymunk.Circle(self.body, radius)
         self.shape.density = density
         self.shape.elasticity = elasticity
+        self.particle_density = 0
         self.color = color
         if self_collision is False:
             self.shape.collision_type = 3
         space.add(self.body, self.shape)
         render_list.append(self)
+        water_particle_list.append(self)
+
+    def calculate_density(self):
+        self.particle_density = 0
+
+        # mass of each different particle, not this one, but they all should be the same
+        mass = self.shape.mass
+
+        for water_object_instance in water_particle_list:
+            position = water_object_instance.body.position
+            distance = math.dist(position, self.body.position)
+            influence = SmoothingKernel(self.shape.radius, distance)
+            self.particle_density += mass * influence
+
+
 
     def draw(self):
         x, y = self.body.position
