@@ -152,7 +152,6 @@ def rightHandElements(window_size):
             container=object_menu_window.container,
             manager=le_ui_manager
         )
-
         global string_object_button
         string_object_button = LevelEditorGUI_objects.Button(
             5, 95, LevelEditor.LE_setup.object_menu_width - 10, 25,
@@ -160,6 +159,15 @@ def rightHandElements(window_size):
             container=object_menu_window.container,
             manager=le_ui_manager
         )
+
+        global prewaterobject_object_button
+        prewaterobject_object_button = LevelEditorGUI_objects.Button(
+            5, 125, LevelEditor.LE_setup.object_menu_width - 10, 25,
+            text='Spawn Pre-Water Object',
+            container=object_menu_window.container,
+            manager=le_ui_manager
+        )
+
     if LevelEditor.LE_setup.show_selection_filters is True:
         '''selection filter window'''
         global selection_filter_window
@@ -174,8 +182,8 @@ def rightHandElements(window_size):
         global selection_list
         selection_list = LevelEditorGUI_objects.SelectionList(
             5, 5, LevelEditor.LE_setup.object_menu_width - 10, y / 2 - 40,
-            item_list=['Enable Shape Detection', 'Enable Corner Detection', 'Balls', 'Walls', 'Bouncing Cubes'],
-            initial_selected_items=['Enable Shape Detection', 'Enable Corner Detection', 'Balls', 'Walls', 'Bouncing Cubes'],
+            item_list=['Enable Shape Detection', 'Enable Corner Detection', 'Balls', 'Walls', 'Bouncing Cubes', 'Pre-Water Objects'],
+            initial_selected_items=['Enable Shape Detection', 'Enable Corner Detection', 'Balls', 'Walls', 'Bouncing Cubes', 'Pre-Water Objects'],
             manager=le_ui_manager,
             container=selection_filter_window.container
         )

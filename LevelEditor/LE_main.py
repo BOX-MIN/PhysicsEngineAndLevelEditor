@@ -92,7 +92,6 @@ def mouse_events_collisions_mode(event):
         if my <= 25 or LevelEditorGUI_manager.le_ui_manager.get_hovering_any_element():
             pass
         elif not corner_touched is None:
-            print('doing')
             clicked = False
             corner_clicked = corner_touched
 
@@ -296,6 +295,16 @@ def le_controls(event):
                     LE_objects.render_list = []
                     LE_save_load_system.load_level(LevelEditorGUI_manager.filename.text_entry_line.get_text())
 
+                if LevelEditorGUI_manager.prewaterobject_object_button.button.check_pressed():
+                    LE_save_load_system.save_level(LevelEditorGUI_manager.filename.text_entry_line.get_text())
+                    LE_save_load_system.save_object(
+                        LevelEditorGUI_manager.filename.text_entry_line.get_text(),
+                        'PreWaterObject',
+                        [300 - LE_setup.xPos, 300 - LE_setup.yPos, 100, 100, 500, 0, 2, 100, (0, 255, 0), True]
+                    )
+                    LE_objects.render_list = []
+                    LE_save_load_system.load_level(LevelEditorGUI_manager.filename.text_entry_line.get_text())
+
                 if LevelEditorGUI_manager.string_object_button.button.check_pressed():
                     raise Exception('object hasn\'t yet been implemented in the save/load system')
 
@@ -307,7 +316,8 @@ def le_controls(event):
         for i in LE_objects.render_list:
             try:
                 i.update_values_from_personal_gui()
-            except AttributeError:
+            except AttributeError as a:
+                print(a)
                 pass
 
     if event.type == QUIT:

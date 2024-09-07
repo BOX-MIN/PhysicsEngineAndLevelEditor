@@ -14,6 +14,7 @@ aspect_ratio = LE_setup.aspect_ratio
 def apply_zoom(zoom_input, zoom_level, ball_radius=None, invert=False):
     if ball_radius is None:
         if isinstance(zoom_input, tuple):
+            #print(zoom_input)
             x, y = zoom_input
             scroll_position = zoom_level
             scroll_position = (int(((scroll_position / 184 * 100) - 50))) / 100
@@ -435,6 +436,197 @@ class SaveWall:
     def update_values_from_personal_gui(self):
         if self.bounce_slider is not None:
             self.bounce = self.bounce_slider.slider.get_current_value()
+
+    def change_color(self):
+        self.color_picker = LevelEditorGUI.LevelEditorGUI_objects.ColorPickerWindow(
+            5, 155, 200, 200,
+            manager=LevelEditorGUI.LevelEditorGUI_manager.le_ui_manager,
+            initial_color=Color(self.color[0], self.color[1], self.color[2], 255),
+            title='Colour Selector'
+        )
+
+class SavePreWaterObject:
+    def __init__(self, x, y, width, height, dpp, epp, dop, aopphpa, color=(0, 255, 0), custom_collision=True):
+        self.width_slide = None
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+
+        self.density_per_particle = dpp
+        self.elasticity_per_particle = epp
+        self.density_of_particles = dop
+        self.amount_of_particles_per_hundred_pixels_area = aopphpa
+        self.collision_type = custom_collision
+        self.color = color
+        self.type = 'Pre-Water Objects'
+        render_list.append(self)
+
+        self.color_picker = None
+        self.color_picker_button = None
+        self.amount_of_particles_per_hundred_pixels_area_slide = None
+        self.density_of_particles_slide = None
+        self.elasticity_per_particle_slide = None
+        self.density_per_particle_slide = None
+        self.properties_window = None
+
+    def draw(self, zoom_level):
+        a, b, c, d = (self.x, self.y), (self.x + self.width, self.y), (self.x + self.width, self.y + self.height), (self.x, self.y + self.height)
+        a = (a[0] + LE_setup.xPos, a[1] + LE_setup.yPos)
+        b = (b[0] + LE_setup.xPos, b[1] + LE_setup.yPos)
+        c = (c[0] + LE_setup.xPos, c[1] + LE_setup.yPos)
+        d = (d[0] + LE_setup.xPos, d[1] + LE_setup.yPos)
+        pygame.draw.polygon(LE_setup.le_screen, self.color, [
+            apply_zoom(a, zoom_level),
+            apply_zoom(b, zoom_level),
+            apply_zoom(c, zoom_level),
+            apply_zoom(d, zoom_level)
+        ], 5)
+
+    def get_save_info(self):
+        save_info_list = ['PreWaterObject', self.x, self.y, self.width, self.height, self.density_per_particle,
+                          self.elasticity_per_particle, self.density_of_particles,
+                          self.amount_of_particles_per_hundred_pixels_area, self.color, self.collision_type]
+        return save_info_list
+
+    def check_mouse_touching(self, zoom_level):
+
+        a, b, c, d = [(self.x, self.y), (self.x + self.width, self.y), (self.x + self.width, self.y + self.height), (self.x, self.y + self.height)]
+        a = (a[0] + LE_setup.xPos, a[1] + LE_setup.yPos)
+        b = (b[0] + LE_setup.xPos, b[1] + LE_setup.yPos)
+        c = (c[0] + LE_setup.xPos, c[1] + LE_setup.yPos)
+        d = (d[0] + LE_setup.xPos, d[1] + LE_setup.yPos)
+
+        a = apply_zoom(a, zoom_level)
+        b = apply_zoom(b, zoom_level)
+        c = apply_zoom(c, zoom_level)
+        d = apply_zoom(d, zoom_level)
+
+        mx, my = pygame.mouse.get_pos()
+        path = matplotlib.path.Path([a, b, c, d])
+        if path.contains_point((mx, my)):
+            return True
+        else:
+            return False
+
+    def create_personal_gui(self):
+        self.properties_window = LevelEditorGUI.LevelEditorGUI_objects.Container(
+            0, 25, 215, 475,
+            title=str(self),
+            draggable=True,
+            resizable=True,
+            manager=LevelEditorGUI.LevelEditorGUI_manager.le_ui_manager,
+            hideonclose=False
+        )
+        self.density_per_particle_slide = LevelEditorGUI.LevelEditorGUI_objects.HoriSlider(
+            5, 5, 150, 25,
+            container=self.properties_window.container,
+            label=True,
+            labeltext='Density of Particle',
+            startvalue=self.density_per_particle,
+            sliderange=(1, 1000),
+            clickincrement=5,
+            manager=LevelEditorGUI.LevelEditorGUI_manager.le_ui_manager
+        )
+        self.elasticity_per_particle_slide = LevelEditorGUI.LevelEditorGUI_objects.HoriSlider(
+            5, 55, 150, 25,
+            container=self.properties_window.container,
+            label=True,
+            labeltext='Elasticity of Particle',
+            startvalue=self.elasticity_per_particle,
+            sliderange=(0, 1.00),
+            clickincrement=0.01,
+            manager=LevelEditorGUI.LevelEditorGUI_manager.le_ui_manager
+        )
+        self.density_of_particles_slide = LevelEditorGUI.LevelEditorGUI_objects.HoriSlider(
+            5, 105, 150, 25,
+            container=self.properties_window.container,
+            label=True,
+            labeltext='Particle Density',
+            startvalue=self.density_of_particles,
+            sliderange=(1, 100),
+            clickincrement=1,
+            manager=LevelEditorGUI.LevelEditorGUI_manager.le_ui_manager
+        )
+        self.amount_of_particles_per_hundred_pixels_area_slide = LevelEditorGUI.LevelEditorGUI_objects.HoriSlider(
+            5, 155, 150, 25,
+            container=self.properties_window.container,
+            label=True,
+            labeltext='AOPPHPA',
+            startvalue=self.amount_of_particles_per_hundred_pixels_area,
+            sliderange=(1, 3000),
+            clickincrement=1,
+            manager=LevelEditorGUI.LevelEditorGUI_manager.le_ui_manager
+        )
+        self.width_slide = LevelEditorGUI.LevelEditorGUI_objects.HoriSlider(
+            5, 205, 150, 25,
+            container=self.properties_window.container,
+            label=True,
+            labeltext='Rect Width',
+            startvalue=self.width,
+            sliderange=(10, 1000),
+            clickincrement=10,
+            manager=LevelEditorGUI.LevelEditorGUI_manager.le_ui_manager
+        )
+        self.height_slide = LevelEditorGUI.LevelEditorGUI_objects.HoriSlider(
+            5, 255, 150, 25,
+            container=self.properties_window.container,
+            label=True,
+            labeltext='Rect Height',
+            startvalue=self.height,
+            sliderange=(10, 1000),
+            clickincrement=10,
+            manager=LevelEditorGUI.LevelEditorGUI_manager.le_ui_manager
+        )
+        if self.collision_type is False:
+            startvalue = 1
+        else:
+            startvalue = 0
+        self.collision_type_slide = LevelEditorGUI.LevelEditorGUI_objects.HoriSlider(
+            5, 305, 150, 25,
+            container=self.properties_window.container,
+            label=True,
+            labeltext='Default Collisions',
+            startvalue=startvalue,
+            sliderange=(0, 1),
+            clickincrement=1,
+            manager=LevelEditorGUI.LevelEditorGUI_manager.le_ui_manager
+        )
+        self.area_readout = LevelEditorGUI.LevelEditorGUI_objects.Readout(
+            5, 355, 150, 25,
+            labeltext='Area: no data',
+            manager=LevelEditorGUI.LevelEditorGUI_manager.le_ui_manager,
+            container=self.properties_window.container
+        )
+
+        self.particles_readout = LevelEditorGUI.LevelEditorGUI_objects.Readout(
+            5, 380, 150, 25,
+            labeltext='Particles: no data',
+            manager=LevelEditorGUI.LevelEditorGUI_manager.le_ui_manager,
+            container=self.properties_window.container
+        )
+        self.color_picker_button = LevelEditorGUI.LevelEditorGUI_objects.Button(
+            5, 405, 150, 25,
+            text='Change Colour',
+            manager=LevelEditorGUI.LevelEditorGUI_manager.le_ui_manager,
+            container=self.properties_window.container
+        )
+
+    def update_values_from_personal_gui(self):
+        if self.density_per_particle_slide is not None:
+            self.elasticity_per_particle = self.elasticity_per_particle_slide.slider.get_current_value()
+            self.density_per_particle = self.density_per_particle_slide.slider.get_current_value()
+            self.density_of_particles = self.density_of_particles_slide.slider.get_current_value()
+            self.amount_of_particles_per_hundred_pixels_area = self.amount_of_particles_per_hundred_pixels_area_slide.slider.get_current_value()
+            self.width = self.width_slide.slider.get_current_value()
+            self.height = self.height_slide.slider.get_current_value()
+            if self.collision_type_slide.slider.get_current_value() == 0:
+                self.collision_type = True
+            else:
+                self.collision_type = False
+
+            self.area_readout.readout.set_text('Area: ' + str(self.width * self.height) + 'px')
+            self.particles_readout.readout.set_text('Particles: ' + str(int(((self.width * self.height) / 100) * (self.amount_of_particles_per_hundred_pixels_area / 100))))
 
     def change_color(self):
         self.color_picker = LevelEditorGUI.LevelEditorGUI_objects.ColorPickerWindow(

@@ -116,7 +116,7 @@ class KinematicObject:
             self.body.velocity = 0, 0
 
 class WaterParticle:
-    def __init__(self, x, y, radius, density, elasticity, custom_collision, radius_overflow=4, color=(0, 255, 255)):
+    def __init__(self, x, y, radius, density, elasticity, custom_collision, radius_overflow=4, color=(0, 255, 0)):
         self.body = pymunk.Body()
         self.body.position = x, y
         self.shape = pymunk.Circle(self.body, radius)
@@ -125,6 +125,7 @@ class WaterParticle:
         self.particle_density = 0
         self.color = color
         self.radius_overflow = radius_overflow
+        self.collision_type = custom_collision
         if custom_collision is True:
             self.shape.collision_type = 3
         space.add(self.body, self.shape)
@@ -134,10 +135,14 @@ class WaterParticle:
         x, y = self.body.position
         x = x + setup.camx
         y = y + setup.camy
-        pygame.draw.circle(display, self.color, (int(x), int(y)), self.shape.radius + self.radius_overflow)
+        if self.collision_type is True:
+            radius_number = self.shape.radius + (self.radius_overflow - abs(self.body.velocity / 500))
+        else:
+            radius_number = self.shape.radius
+        pygame.draw.circle(display, self.color, (int(x), int(y)), radius_number)
 
 class PreWaterObject:
-    def __init__(self, x, y, width, height, dpp, epp, dop, aopphpa, custom_collision=False):
+    def __init__(self, x, y, width, height, dpp, epp, dop, aopphpa, color=(0, 255,0), custom_collision=False):
         self.rect = [(x, y), (x + width, y), (x + width, y + height), (x, y + height)]
         self.rect_area = width * height
         self.rect_ratio = width/height
@@ -145,13 +150,14 @@ class PreWaterObject:
         self.elasticity_per_particle = epp
         self.density_of_particles = dop
         self.amount_of_particles_per_hundred_pixels_area = aopphpa
-        self.amount_of_particles = (self.rect_area / 100) * self.amount_of_particles_per_hundred_pixels_area
+        self.amount_of_particles = (self.rect_area / 100) * (self.amount_of_particles_per_hundred_pixels_area / 100)
         for i in range(int(self.amount_of_particles)):
-            WaterParticle(random.randint(x, x + width), random.randint(y, y + height),
+            WaterParticle(random.randint(int(x), int(x + width)), random.randint(int(y), int(y + height)),
                           self.density_of_particles,
                           self.density_per_particle,
                           self.elasticity_per_particle,
-                          custom_collision
+                          custom_collision,
+                          color=color
                           )
 
 

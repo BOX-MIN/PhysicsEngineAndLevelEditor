@@ -148,7 +148,14 @@ class SelectionList:
             container=container
         )
 
-
+class Readout:
+    def __init__(self, x, y, width, height, labeltext, manager=None, container=None):
+        self.readout = pygame_gui.elements.ui_label.UILabel(
+            relative_rect=pygame.Rect((x, y), (width, 25)),
+            text=labeltext,
+            manager=manager,
+            container=container
+        )
 
 
 
