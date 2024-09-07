@@ -2,3 +2,4 @@ pygame_gui==0.6.12
 pymunk==6.8.1
 moderngl==5.11.1
 pygame-ce==2.5.1
+matplotlib==3.9.2
