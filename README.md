@@ -11,6 +11,8 @@ The mouse ball will interact with the physics environment.
 Hold space and use the arrow keys to move the ball manually.
 Press the '1' key to bring up the shader settings menu.
 
+For the Level Editor, run LE_main.py. Controls are in the project outline.
+
 **Go here for more information on the project:**
 
 [PROJECT OUTLINE AND TODO](TODO_AND_OUTLINE.txt)
