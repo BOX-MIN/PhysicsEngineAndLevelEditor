@@ -146,7 +146,8 @@ class TextEntryBoxWithWindow:
             relative_rect=pygame.Rect((0, 0), (width, height - 60)),
             initial_text=text,
             manager=manager,
-            container=self.window
+            container=self.window,
+            anchors={'left': 'left', 'right': 'right'}
         )
 
 class ColorPickerWindow:

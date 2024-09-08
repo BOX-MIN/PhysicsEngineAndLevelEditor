@@ -20,6 +20,7 @@
 # emmetschell@gmail.com.
 
 import pygame
+import os
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -49,3 +50,8 @@ show_object_menu = True
 show_selection_filters = True
 
 object_menu_width = 200
+
+# path to save files location
+# if encountering 'FileNotFoundError: [WinError 3] The system cannot find the path specified:',
+# try to change this and see if that fixes it
+filepath = os.path.join('PymunkPhysicsAndLevels', 'LevelData')

@@ -357,10 +357,14 @@ def le_controls(event):
             LE_save_load_system.save_level(LevelEditorGUI_manager.filename.text_entry_line.get_text())
         try:
             if LevelEditorGUI_manager.json_window_save_button.button.check_pressed():
-                string = ast.literal_eval(LevelEditorGUI_manager.json_window.text_box.get_text())
-                open(os.path.join('..', 'PymunkPhysicsAndLevels', 'LevelData',
+                prestring = str(LevelEditorGUI_manager.json_window.text_box.get_text())
+                prestring = prestring.replace("],\nObj --> '", "], '")
+                prestring = prestring.replace("{\nObj --> ", "{")
+                prestring = prestring.replace("\n}", "}")
+                string = ast.literal_eval(prestring)
+                open(os.path.join(LE_setup.filepath,
                                   str(LevelEditorGUI_manager.json_window.window.window_display_title)), 'w').close()
-                with open(os.path.join('..', 'PymunkPhysicsAndLevels', 'LevelData',
+                with open(os.path.join(LE_setup.filepath,
                                        str(LevelEditorGUI_manager.json_window.window.window_display_title)), 'r+') as file:
                     file.seek(0)
                     json.dump(string, file)
@@ -377,8 +381,8 @@ def le_controls(event):
 
         if LevelEditorGUI_manager.file_renamer_button.button.check_pressed():
             os.rename(
-                os.path.join('..', 'PymunkPhysicsAndLevels', 'LevelData', LevelEditorGUI_manager.file_loader_list.menu.selected_option[0]),
-                os.path.join('..', 'PymunkPhysicsAndLevels', 'LevelData', LevelEditorGUI_manager.filename.text_entry_line.get_text())
+                os.path.join(LE_setup.filepath, LevelEditorGUI_manager.file_loader_list.menu.selected_option[0]),
+                os.path.join(LE_setup.filepath, LevelEditorGUI_manager.filename.text_entry_line.get_text())
             )
             LevelEditorGUI_manager.kill_file_loader_dropdown()
             LevelEditorGUI_manager.load_file_loader_dropdown()

@@ -22,6 +22,7 @@
 import json
 import sys
 import LevelEditor.LE_setup
+from LevelEditor import LE_setup
 from LevelEditor.LevelEditorGUI import LevelEditorGUI_objects
 import pygame_gui
 import pygame
@@ -41,9 +42,11 @@ editing_mode_dropdown = LevelEditorGUI_objects.DropDownMenu(
 filename = LevelEditorGUI_objects.TextEntryLine(
     225, 0, 150, 25,
     manager=le_ui_manager,
-    initial_text=os.listdir(os.path.join('..', 'PymunkPhysicsAndLevels', 'LevelData'))[0],
+    initial_text=os.listdir(LE_setup.filepath)[0],
     placeholder_text='Input Name of Level'
 )
+print(LE_setup.filepath)
+print(os.listdir(LE_setup.filepath)[0])
 file_renamer_button = LevelEditorGUI_objects.Button(
     375, 0, 75, 25,
     text='Rename',
@@ -54,7 +57,7 @@ def load_file_loader_dropdown():
     file_to_set = filename.text_entry_line.get_text()
     global file_loader_list
     file_loader_list = LevelEditorGUI_objects.DropDownMenu(
-        os.listdir(os.path.join('..', 'PymunkPhysicsAndLevels', 'LevelData')),
+        os.listdir(LE_setup.filepath),
         file_to_set,
         450, 0, 175, 25,
         manager=le_ui_manager
@@ -75,9 +78,11 @@ file_loader_button = LevelEditorGUI_objects.Button(
 
 def load_json_window():
     file_to_load = file_loader_list.menu.selected_option[0]
-    with open(os.path.join('..', 'PymunkPhysicsAndLevels', 'LevelData', str(file_to_load)), 'r+') as file:
+    with open(os.path.join(LE_setup.filepath, str(file_to_load)), 'r+') as file:
         text_to_display = str(json.load(file))
-    text_to_display = text_to_display.replace("], '", "],\n '")
+    text_to_display = text_to_display.replace("], '", "],\nObj --> '")
+    text_to_display = text_to_display.replace("{", "{\nObj --> ")
+    text_to_display = text_to_display.replace("}", "\n}")
     window_height = 600
     global json_window
     json_window = LevelEditorGUI_objects.TextEntryBoxWithWindow(
@@ -85,6 +90,7 @@ def load_json_window():
         title=str(file_to_load),
         manager=le_ui_manager,
         text=str(text_to_display),
+        resizable=True
     )
     global json_window_save_button
     json_window_save_button = LevelEditorGUI_objects.Button(
