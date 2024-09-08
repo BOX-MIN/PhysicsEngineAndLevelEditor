@@ -41,7 +41,6 @@ class Container:
             resizable=resizable,
             draggable=draggable
         )
-        print('hi')
 
 
 class HoriSlider:
@@ -94,4 +93,13 @@ class ColorPickerWindow:
             manager=manager,
             initial_colour=initial_color,
             window_title=title,
+        )
+
+class Readout:
+    def __init__(self, x, y, width, height, labeltext, manager=None, container=None):
+        self.readout = pygame_gui.elements.ui_label.UILabel(
+            relative_rect=pygame.Rect((x, y), (width, height)),
+            text=labeltext,
+            manager=manager,
+            container=container
         )

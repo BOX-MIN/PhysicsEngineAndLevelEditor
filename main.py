@@ -107,6 +107,8 @@ def main():
         for i in objects.render_list:
             i.draw()
 
+        pygame.draw.rect(display, (0, 0, 0), [(5, 5), (85, 25)])
+
         manager.draw_ui(gui_display)
 
         """openGl rendering code. taking Pygame surface, converting, and passing through shaders"""
@@ -141,7 +143,7 @@ def main():
         frame_tex2.release()
 
         space.step(1 / fps)
-        print(clock.get_fps())
+        GUI_manager.FPSReadout.readout.set_text(f'FPS: {round(clock.get_fps(), 2)}')
 
 
 main()

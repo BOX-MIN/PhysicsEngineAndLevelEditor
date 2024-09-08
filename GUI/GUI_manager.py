@@ -21,6 +21,9 @@
 
 from GUI import GUI_objects
 
+"""FPS Counter"""
+FPSReadout = GUI_objects.Readout(5, 5, 85, 25, 'FPS:')
+
 """Main menu"""
 MainMenuWindow = GUI_objects.Container(400, 400, 195, 150, title='Dev tools')
 
@@ -50,7 +53,7 @@ Lightingbcolor = GUI_objects.HoriSlider(10, 150, 150, 25, container=LightingWind
 Lightingrcolor.slider.set_current_value(10)
 Lightinggcolor.slider.set_current_value(10)
 Lightingbcolor.slider.set_current_value(50)
-LightingSlider1.slider.set_current_value(2)
+LightingSlider1.slider.set_current_value(9)
 
 LightingWindow.container.hide()
 
