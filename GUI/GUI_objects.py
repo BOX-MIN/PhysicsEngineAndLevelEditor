@@ -86,3 +86,12 @@ class button:
             container=container,
             tool_tip_text=tool_tip_text
         )
+
+class ColorPickerWindow:
+    def __init__(self, x, y, width, height, manager=None, initial_color=pygame.Color(0, 0, 0, 0), title='Colour Selector'):
+        self.picker_window = pygame_gui.windows.ui_colour_picker_dialog.UIColourPickerDialog(
+            rect=pygame.Rect((x, y), (width, height)),
+            manager=manager,
+            initial_colour=initial_color,
+            window_title=title,
+        )

@@ -28,7 +28,32 @@ MainMenuButton1 = GUI_objects.button(10, 10, -1, 25, text='Sine wave effect', co
 
 MainMenuButton2 = GUI_objects.button(10, 45, -1, 25, text='CRT effect', container=MainMenuWindow.container)
 
+MainMenuButton3 = GUI_objects.button(10, 80, -1, 25, text='Temp Lighting Controls', container=MainMenuWindow.container)
+
 MainMenuWindow.container.hide()
+
+"""Lighting control"""
+LightingWindow = GUI_objects.Container(400, 400, 200, 250, title='Sine wave effect control')
+
+LightingSlider1 = GUI_objects.HoriSlider(10, 0, 150, 25, container=LightingWindow.container, label=True,
+                                         labeltext='Intensity', sliderange=(0.1, 20.0), clickincrement=0.1)
+
+Lightingrcolor = GUI_objects.HoriSlider(10, 50, 150, 25, container=LightingWindow.container, label=True,
+                                         labeltext='Red', sliderange=(0, 255), clickincrement=1)
+
+Lightinggcolor = GUI_objects.HoriSlider(10, 100, 150, 25, container=LightingWindow.container, label=True,
+                                         labeltext='Green', sliderange=(0, 255), clickincrement=1)
+
+Lightingbcolor = GUI_objects.HoriSlider(10, 150, 150, 25, container=LightingWindow.container, label=True,
+                                         labeltext='Blue', sliderange=(0, 255), clickincrement=1)
+
+Lightingrcolor.slider.set_current_value(10)
+Lightinggcolor.slider.set_current_value(10)
+Lightingbcolor.slider.set_current_value(50)
+LightingSlider1.slider.set_current_value(2)
+
+LightingWindow.container.hide()
+
 
 """Sine wave effect control"""
 SineWaveWindow = GUI_objects.Container(400, 400, 195, 150, title='Sine wave effect control')

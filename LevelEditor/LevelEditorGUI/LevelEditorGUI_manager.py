@@ -99,6 +99,13 @@ def load_json_window():
         container=json_window.window,
         manager=le_ui_manager
     )
+    global normalise_json_button
+    normalise_json_button = LevelEditorGUI_objects.Button(
+        270, window_height - 58, 120, 25,
+        text='Float -> Int',
+        container=json_window.window,
+        manager=le_ui_manager
+    )
 
 '''right hand side elements'''
 def rightHandElements(window_size):

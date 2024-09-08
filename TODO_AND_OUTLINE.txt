@@ -56,11 +56,11 @@ level editor Selection and Editing mode controls outline:
 
 T0D0 LIST: -------------------------------------------------------------------------------------------------------------
 
-level saving: //complete
+level saving:                                                                                                 //complete
     uses JSON file format to save a dictionary of the level data. when loading, creates class instances of all of the
     objects saved in the data. see Rain world clone\see save_load_system.py
 
-level editor: //in progress
+level editor:                                                                                                 //complete
     should be within the project, but completely separable; no dependencies on large parts of the main.py code
     ecosystem. following the outline laid out in 'three layer graphics/simulation' and the Rain World level editor, the
     editor should have three main modes(contd. below):
@@ -84,7 +84,7 @@ level editor: //in progress
 
 more robust dev tools
 
-creatures with procedural animation and intelligent pathfinding compatible with levels:
+creatures with procedural animation and intelligent pathfinding compatible with levels:                    //in progress
     a la Rain World. see tigsource Project Rain World devlogs for more information.
 
 BUGS: ------------------------------------------------------------------------------------------------------------------

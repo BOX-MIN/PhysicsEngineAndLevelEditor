@@ -28,6 +28,12 @@ uniform float amplitude;
 uniform float rate;
 uniform float warp;
 uniform vec2 center;
+uniform vec2 cam;
+uniform float aspect_ratio;
+uniform int screen_height;
+uniform int screen_width;
+uniform float light_intensity;
+uniform vec3 light_color;
 
 in vec2 uvs;
 out vec4 layered;
@@ -35,6 +41,8 @@ out vec4 layered;
 vec4 layer(vec4 foreground, vec4 background);
 
 void main() {
+    vec3 shadowcolor = vec3(-1, -1, -1);
+    vec3 lightcolor = vec3(light_color);
     vec4 foreground = vec4(texture(tex2, uvs).rgb, 1);
 
     //removes black background of the foreground texture
@@ -45,11 +53,28 @@ void main() {
     vec2 sine_x_uvs = vec2(uvs.x + sin(uvs.y * 10 + time * rate) * amplitude, uvs.y);
 
     vec2 center = vec2(center.x + sin(uvs.y * 10 + time * rate) * amplitude, center.y);
-    vec2 off_center = sine_x_uvs - center;
+    vec2 off_center = (sine_x_uvs) - center;
     off_center *= 1.0 + 0.8 * pow(abs(off_center.yx), vec2(warp));
     vec2 CRT_uvs = center + off_center;
 
-    vec4 background = vec4(texture(tex1, CRT_uvs).rgb, 1.0);
+    //  + sin(uvs.y * 10 + time * rate) * amplitude adding this code made the lights not do the sine thing
+
+    vec2 light_center = vec2((center.x + (cam.x / screen_width * aspect_ratio)), center.y + cam.y / screen_height);
+    float light_off_center = sqrt( ((CRT_uvs.x * aspect_ratio - light_center.x) * (CRT_uvs.x * aspect_ratio - light_center.x)) + ((CRT_uvs.y - light_center.y) * (CRT_uvs.y - light_center.y)) );
+    vec2 light_off_center_vec2 = vec2(light_off_center / light_intensity, light_off_center / light_intensity);
+    vec2 light_on_center = (1 / abs(light_off_center_vec2));
+
+    float foo = aspect_ratio;
+
+    vec4 background = vec4(mix(
+        mix(mix(texture(tex1, CRT_uvs).rgb, shadowcolor.rgb, abs(light_off_center_vec2.x)),
+        mix(texture(tex1, CRT_uvs).rgb, shadowcolor.rgb, abs(light_off_center_vec2.y)), 0.5),
+
+        mix(mix(texture(tex1, CRT_uvs).rgb, lightcolor.rgb, abs(light_on_center.x)),
+        mix(texture(tex1, CRT_uvs).rgb, lightcolor.rgb, abs(light_on_center.y)), 0.5),
+
+        0.0005)
+    , 1.0);
 
     if (CRT_uvs.x > 1.0 ||
         CRT_uvs.x < 0.0 ||

@@ -50,6 +50,9 @@ def handle_events():
             if GUI_manager.MainMenuButton2.button.check_pressed():
                 GUI_manager.CRTWindow.container.show()
 
+            if GUI_manager.MainMenuButton3.button.check_pressed():
+                GUI_manager.LightingWindow.container.show()
+
             if GUI_manager.CRTButton1.button.check_pressed():
                 GUI_manager.CRTSlider1.slider.set_current_value(0.5)
                 GUI_manager.CRTSlider2.slider.set_current_value(0.5)
@@ -121,6 +124,14 @@ def main():
         oGL.program['center'] = (GUI_manager.CRTSlider1.slider.get_current_value(),
                                  GUI_manager.CRTSlider2.slider.get_current_value())
         oGL.program['warp'] = GUI_manager.CRTSlider3.slider.get_current_value()
+        oGL.program['cam'] = (setup.camx, setup.camy)
+        oGL.program['aspect_ratio'] = pygame.display.get_window_size()[0] / pygame.display.get_window_size()[1]
+        oGL.program['screen_width'] = pygame.display.get_window_size()[0]
+        oGL.program['screen_height'] = pygame.display.get_window_size()[1]
+        oGL.program['light_intensity'] = float(GUI_manager.LightingSlider1.slider.get_current_value())
+        oGL.program['light_color'] = (GUI_manager.Lightingrcolor.slider.get_current_value(),
+                                      GUI_manager.Lightinggcolor.slider.get_current_value(),
+                                      GUI_manager.Lightingbcolor.slider.get_current_value())
         oGL.render_object.render(mode=oGL.moderngl.TRIANGLE_STRIP)
 
         """"""
