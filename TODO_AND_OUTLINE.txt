@@ -104,6 +104,10 @@ reuse textures for modernGL rendering:
         takes more processing power than is necessary.
     INTENDED BEHAVIOUR: create two openGL textures at the start of the program, and then reuse them every frame instead.
 
+make light radius not depend on screen size:
+    ISSUE: light radius is affected by the size of the screen.
+    INTENDED BEHAVIOUR: light radius should be independent of screen size.
+
 LE SPECIFIC -- make polygon shapes able to be edited, then moved, without resetting shape:
     ISSUE: if the vertices of a polygon are changed in the level editor, the JSON needs to be saved and reloaded before
         moving that polygon, otherwise the vertices reset to how they were before the change.
