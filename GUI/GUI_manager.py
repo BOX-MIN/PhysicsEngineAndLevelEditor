@@ -50,10 +50,10 @@ Lightinggcolor = GUI_objects.HoriSlider(10, 100, 150, 25, container=LightingWind
 Lightingbcolor = GUI_objects.HoriSlider(10, 150, 150, 25, container=LightingWindow.container, label=True,
                                          labeltext='Blue', sliderange=(0, 255), clickincrement=1)
 
-Lightingrcolor.slider.set_current_value(10)
-Lightinggcolor.slider.set_current_value(10)
-Lightingbcolor.slider.set_current_value(50)
-LightingSlider1.slider.set_current_value(9)
+Lightingrcolor.slider.set_current_value(255)
+Lightinggcolor.slider.set_current_value(60)
+Lightingbcolor.slider.set_current_value(80)
+LightingSlider1.slider.set_current_value(1.9)
 
 LightingWindow.container.hide()
 

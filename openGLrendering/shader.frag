@@ -29,6 +29,7 @@ uniform float rate;
 uniform float warp;
 uniform vec2 center;
 uniform vec2 cam;
+uniform vec2 lightoffset;
 uniform float aspect_ratio;
 uniform int screen_height;
 uniform int screen_width;
@@ -59,7 +60,7 @@ void main() {
 
     //  + sin(uvs.y * 10 + time * rate) * amplitude adding this code made the lights not do the sine thing
 
-    vec2 light_center = vec2((center.x + (cam.x / screen_width * aspect_ratio)), center.y + cam.y / screen_height);
+    vec2 light_center = vec2((center.x + ((cam.x + lightoffset.x) / screen_width * aspect_ratio)), center.y + (cam.y + lightoffset.y) / screen_height);
     float light_off_center = sqrt( ((CRT_uvs.x * aspect_ratio - light_center.x) * (CRT_uvs.x * aspect_ratio - light_center.x)) + ((CRT_uvs.y - light_center.y) * (CRT_uvs.y - light_center.y)) );
     vec2 light_off_center_vec2 = vec2(light_off_center / light_intensity, light_off_center / light_intensity);
     vec2 light_on_center = (1 / abs(light_off_center_vec2));
