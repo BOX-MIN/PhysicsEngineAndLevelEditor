@@ -34,6 +34,7 @@ uniform float aspect_ratio;
 uniform int screen_height;
 uniform int screen_width;
 uniform float light_intensity;
+uniform float shadow_fade;
 uniform vec3 light_color;
 
 in vec2 uvs;
@@ -62,8 +63,9 @@ void main() {
 
     vec2 light_center = vec2((center.x + ((cam.x + lightoffset.x) / screen_width * aspect_ratio)), center.y + (cam.y + lightoffset.y) / screen_height);
     float light_off_center = sqrt( ((CRT_uvs.x * aspect_ratio - light_center.x) * (CRT_uvs.x * aspect_ratio - light_center.x)) + ((CRT_uvs.y - light_center.y) * (CRT_uvs.y - light_center.y)) );
-    vec2 light_off_center_vec2 = vec2(light_off_center / light_intensity, light_off_center / light_intensity);
-    vec2 light_on_center = (1 / abs(light_off_center_vec2));
+    vec2 light_off_center_vec2 = vec2(light_off_center, light_off_center);
+    vec2 light_on_center = (1 / vec2(abs(light_off_center_vec2.x / light_intensity), abs(light_off_center_vec2.y / light_intensity)));
+    light_off_center_vec2 = vec2(light_off_center_vec2.x / shadow_fade, light_off_center_vec2.y / shadow_fade);
 
     float foo = aspect_ratio;
 

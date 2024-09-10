@@ -38,6 +38,13 @@ editing_mode_dropdown = LevelEditorGUI_objects.DropDownMenu(
     manager=le_ui_manager
 )
 
+'''copyright notice'''
+copyright_notice = LevelEditorGUI_objects.Button(
+    735, 0, 75, 25,
+    text='Legal',
+    manager=le_ui_manager
+)
+
 '''filename and file loading'''
 filename = LevelEditorGUI_objects.TextEntryLine(
     225, 0, 150, 25,

@@ -59,7 +59,8 @@ time = 0        # for shaders
 
 camx = 0
 camy = 0
-camspeed = 4
+camspeed = 8
 
-
+fps_list = []
+fps_list_counter = 0
 

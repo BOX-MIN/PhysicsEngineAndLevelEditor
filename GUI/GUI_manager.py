@@ -22,7 +22,7 @@
 from GUI import GUI_objects
 
 """FPS Counter"""
-FPSReadout = GUI_objects.Readout(5, 5, 85, 25, 'FPS:')
+FPSReadout = GUI_objects.Readout(-35, 0, 290, 25, 'FPS:')
 
 """Main menu"""
 MainMenuWindow = GUI_objects.Container(400, 400, 195, 150, title='Dev tools')
@@ -36,10 +36,10 @@ MainMenuButton3 = GUI_objects.button(10, 80, -1, 25, text='Temp Lighting Control
 MainMenuWindow.container.hide()
 
 """Lighting control"""
-LightingWindow = GUI_objects.Container(400, 400, 200, 250, title='Sine wave effect control')
+LightingWindow = GUI_objects.Container(5, 50, 200, 300, title='Lighting effect control')
 
 LightingSlider1 = GUI_objects.HoriSlider(10, 0, 150, 25, container=LightingWindow.container, label=True,
-                                         labeltext='Intensity', sliderange=(0.1, 20.0), clickincrement=0.1)
+                                         labeltext='Light Intensity', sliderange=(0.1, 20.0), clickincrement=0.1)
 
 Lightingrcolor = GUI_objects.HoriSlider(10, 50, 150, 25, container=LightingWindow.container, label=True,
                                          labeltext='Red', sliderange=(0, 255), clickincrement=1)
@@ -50,12 +50,16 @@ Lightinggcolor = GUI_objects.HoriSlider(10, 100, 150, 25, container=LightingWind
 Lightingbcolor = GUI_objects.HoriSlider(10, 150, 150, 25, container=LightingWindow.container, label=True,
                                          labeltext='Blue', sliderange=(0, 255), clickincrement=1)
 
+Lightingshadowfade = GUI_objects.HoriSlider(10, 200, 150, 25, container=LightingWindow.container, label=True,
+                                         labeltext='Shadow Fade', sliderange=(0.1, 20.0), clickincrement=0.1)
+
 Lightingrcolor.slider.set_current_value(255)
 Lightinggcolor.slider.set_current_value(60)
 Lightingbcolor.slider.set_current_value(80)
-LightingSlider1.slider.set_current_value(1.9)
+LightingSlider1.slider.set_current_value(0)
+Lightingshadowfade.slider.set_current_value(20)
 
-LightingWindow.container.hide()
+LightingWindow.container.show()
 
 
 """Sine wave effect control"""

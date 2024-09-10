@@ -20,7 +20,9 @@ import random
 # emmetschell@gmail.com.
 
 import sys
+from statistics import median
 
+from numpy.ma.extras import average
 from pygame import *
 
 import save_load_system
@@ -64,7 +66,7 @@ def handle_events():
 def main():
     #waterone = objects.PreWaterObject(200, 0, 100, 100, 500, 0, 2, 100, (0, 255, 0), True)
     save_load_system.load_level('ballcascades.json')
-
+    #save_load_system.load_level('bestroom.json')
     # TODO: when implementing level editor, make sure that objects can reference other objects, so that things like
     #  strings will work
     # stringOne = objects.String(ballTwo.body, ballOne.body, 25)
@@ -87,7 +89,14 @@ def main():
         # temporary camera controls
         key = pygame.key.get_pressed()
         if key[K_SPACE]:
-            pass
+            if key[K_RIGHT]:
+                lxvel += camspeed
+            elif key[K_LEFT]:
+                lxvel += -camspeed
+            elif key[K_UP]:
+                lyvel += -camspeed
+            elif key[K_DOWN]:
+                lyvel += camspeed
         elif key[K_RIGHT]:
             setup.camx += -camspeed
         elif key[K_LEFT]:
@@ -112,7 +121,8 @@ def main():
         for i in objects.render_list:
             i.draw()
 
-        pygame.draw.rect(display, (0, 0, 0), [(5, 5), (85, 25)])
+        # fps counter background
+        pygame.draw.rect(gui_display, (0, 0, 1), [(-35, 0), (255, 25)])
 
         manager.draw_ui(gui_display)
 
@@ -139,13 +149,12 @@ def main():
         oGL.program['light_color'] = (GUI_manager.Lightingrcolor.slider.get_current_value(),
                                       GUI_manager.Lightinggcolor.slider.get_current_value(),
                                       GUI_manager.Lightingbcolor.slider.get_current_value())
-        lxvel += random.randint(-3, 2)
-        lyvel += random.randrange(-3, 2)
-        lxvel = lxvel * 0.3
-        lyvel = lyvel * 0.3
+        lxvel = lxvel * 0.6
+        lyvel = lyvel * 0.6
         lxpos = lxpos + lxvel
         lypos = lypos + lyvel
         oGL.program['lightoffset'] = (lxpos, lypos)
+        oGL.program['shadow_fade'] = GUI_manager.Lightingshadowfade.slider.get_current_value()
         oGL.render_object.render(mode=oGL.moderngl.TRIANGLE_STRIP)
 
         """"""
@@ -155,7 +164,19 @@ def main():
         frame_tex2.release()
 
         space.step(1 / fps)
-        GUI_manager.FPSReadout.readout.set_text(f'FPS: {round(clock.get_fps(), 2)}')
+
+        """FPS limiter and counter"""
+        setup.fps_list.append(round(clock.get_fps(), 2))
+
+        if setup.fps_list_counter < 600:
+            setup.fps_list_counter += 1
+        else:
+            setup.fps_list_counter = 0
+            setup.fps_list = [120]
+
+        GUI_manager.FPSReadout.readout.set_text(
+            f'FPS: {round(clock.get_fps(), 2)}, Average 5s: {round(median(setup.fps_list), 2)}'
+        )
 
 
 main()

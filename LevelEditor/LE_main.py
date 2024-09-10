@@ -79,7 +79,8 @@ def mouse_events_selection_mode(event):
     if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[2] is True:
         object_touched = touching_object()
         object_touched.create_personal_gui()
-    if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[1] is True:
+    key = pygame.key.get_pressed()
+    if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[1] is True or key[K_f]:
         LE_setup.input_mode = 'collisions/object placement'
         for i in LE_objects.render_list:
             try:
@@ -327,7 +328,14 @@ def le_controls(event):
                     LE_save_load_system.load_level(LevelEditorGUI_manager.filename.text_entry_line.get_text())
 
                 if LevelEditorGUI_manager.string_object_button.button.check_pressed():
-                    raise Exception('object hasn\'t yet been implemented in the save/load system')
+                    LE_save_load_system.save_level(LevelEditorGUI_manager.filename.text_entry_line.get_text())
+                    LE_save_load_system.save_object(
+                        LevelEditorGUI_manager.filename.text_entry_line.get_text(),
+                        'String',
+                        ['actual id of object to be connected to', 'another object or coordinates', 'length', 'idetifier']
+                    )
+                    LE_objects.render_list = []
+                    LE_save_load_system.load_level(LevelEditorGUI_manager.filename.text_entry_line.get_text())
 
             except AttributeError:
                 pass
@@ -379,6 +387,35 @@ def le_controls(event):
         if LevelEditorGUI_manager.json_display_button.button.check_pressed():
             LevelEditorGUI_manager.load_json_window()
 
+        if LevelEditorGUI_manager.copyright_notice.button.check_pressed():
+            json_window = LevelEditorGUI_objects.TextEntryBoxWithWindow(
+                25, 25, 800, 600,
+                title=str('Appropriate Legal Notices'),
+                manager=LevelEditorGUI_manager.le_ui_manager,
+                text=str('''                PhysicsEngineAndLevelEditor is a 2D physics engine and level editor
+                in python, using pygame and pymunk, and rendering through openGL
+                
+                Copyright (C) 2024  Emmet Schell
+                
+                This program is free software: you can redistribute it and/or modify
+                it under the terms of the GNU General Public License as published by
+                the Free Software Foundation, either version 3 of the License, or
+                any later version.
+                
+                this program is distributed in the hope that it will be useful,
+                but WITHOUT ANY WARRANTY; without even the implied warranty of
+                MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+                GNU General Public License for more details.
+                
+                You should have received a copy of the GNU General Public License
+                along with this program.  If not, see <https://www.gnu.org/licenses/>.
+                
+                To contact the author of this program, Email them at
+                emmetschell@gmail.com.
+                '''),
+                resizable=True
+            )
+
         if LevelEditorGUI_manager.file_renamer_button.button.check_pressed():
             os.rename(
                 os.path.join(LE_setup.filepath, LevelEditorGUI_manager.file_loader_list.menu.selected_option[0]),
@@ -388,6 +425,7 @@ def le_controls(event):
             LevelEditorGUI_manager.load_file_loader_dropdown()
 
         if LevelEditorGUI_manager.file_loader_button.button.check_pressed():
+            print(os.path.join('..', 'PymunkPhysicsAndLevels', 'LevelData'))
             print(LevelEditorGUI_manager.file_loader_list.menu.selected_option[0])
             LE_objects.render_list = []
             LE_save_load_system.load_level(LevelEditorGUI_manager.file_loader_list.menu.selected_option[0])
@@ -467,6 +505,7 @@ def LEMain():
         LevelEditorGUI_manager.le_ui_manager.draw_ui(LE_setup.le_display)
 
         pygame.display.flip()
+        print(round(LE_setup.clock.get_fps(), 2))
 
 
 LEMain()
