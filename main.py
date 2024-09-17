@@ -1,6 +1,6 @@
 # PhysicsEngineAndLevelEditor is a 2D physics engine and level editor
 # in python, using pygame and pymunk, and rendering through openGL
-import random
+
 # Copyright (C) 2024  Emmet Schell
 
 # This program is free software: you can redistribute it and/or modify
@@ -22,11 +22,11 @@ import random
 import sys
 from statistics import median
 
-from numpy.ma.extras import average
 from pygame import *
 
 import save_load_system
 from PymunkPhysicsAndLevels import objects
+import new_player_control as npc
 
 import openGLrendering.openGLrendering as oGL
 
@@ -75,6 +75,7 @@ def main():
 
     Mx, My = pygame.mouse.get_pos()
     mouseCursorBall = objects.KinematicObject(Mx, My, 15)
+    player = npc.PlayerBox((200, 200), (250,250), (200, 250), (250, 200), 1000, color=(0, 0, 0))
 
     lxvel = 0
     lyvel = 0
@@ -85,6 +86,7 @@ def main():
         handle_events()
 
         mouseCursorBall.move(200)
+        player.move(20)
 
         # temporary camera controls
         key = pygame.key.get_pressed()
@@ -120,6 +122,7 @@ def main():
 
         for i in objects.render_list:
             i.draw()
+        player.draw()
 
         # fps counter background
         pygame.draw.rect(gui_display, (0, 0, 1), [(-35, 0), (255, 25)])

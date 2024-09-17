@@ -69,15 +69,17 @@ void main() {
 
     float foo = aspect_ratio;
 
-    vec4 background = vec4(mix(
-        mix(mix(texture(tex1, CRT_uvs).rgb, shadowcolor.rgb, abs(light_off_center_vec2.x)),
-        mix(texture(tex1, CRT_uvs).rgb, shadowcolor.rgb, abs(light_off_center_vec2.y)), 0.5),
+    vec4 background = vec4(texture(tex1, CRT_uvs).rgb, 1.0);
 
-        mix(mix(texture(tex1, CRT_uvs).rgb, lightcolor.rgb, abs(light_on_center.x)),
-        mix(texture(tex1, CRT_uvs).rgb, lightcolor.rgb, abs(light_on_center.y)), 0.5),
-
-        0.0005)
-    , 1.0);
+    //vec4 background = vec4(mix(
+    //    mix(mix(texture(tex1, CRT_uvs).rgb, shadowcolor.rgb, abs(light_off_center_vec2.x)),
+    //    mix(texture(tex1, CRT_uvs).rgb, shadowcolor.rgb, abs(light_off_center_vec2.y)), 0.5),
+    //
+    //    mix(mix(texture(tex1, CRT_uvs).rgb, lightcolor.rgb, abs(light_on_center.x)),
+    //    mix(texture(tex1, CRT_uvs).rgb, lightcolor.rgb, abs(light_on_center.y)), 0.5),
+    //
+    //    0.0005)
+    //, 1.0);
 
     if (CRT_uvs.x > 1.0 ||
         CRT_uvs.x < 0.0 ||
