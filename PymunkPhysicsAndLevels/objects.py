@@ -117,7 +117,7 @@ class KinematicObject:
         y = y + setup.camy
         pygame.draw.circle(display, (0, 255, 0), (int(x), int(y)), self.shape.radius)
 
-    def move(self, speed=80):
+    def follow_cursor(self, speed=80):
         x, y = self.body.position
         x = x + setup.camx
         y = y + setup.camy
@@ -135,6 +135,7 @@ class KinematicObject:
             self.body.velocity = 0, speed
         else:
             self.body.velocity = 0, 0
+
 
 class WaterParticle:
     def __init__(self, x, y, radius, density, elasticity, custom_collision, radius_overflow=4, color=(0, 255, 0)):

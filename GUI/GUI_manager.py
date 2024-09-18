@@ -56,10 +56,10 @@ Lightingshadowfade = GUI_objects.HoriSlider(10, 200, 150, 25, container=Lighting
 Lightingrcolor.slider.set_current_value(255)
 Lightinggcolor.slider.set_current_value(60)
 Lightingbcolor.slider.set_current_value(80)
-LightingSlider1.slider.set_current_value(0)
+LightingSlider1.slider.set_current_value(0.1)
 Lightingshadowfade.slider.set_current_value(20)
 
-LightingWindow.container.show()
+LightingWindow.container.hide()
 
 
 """Sine wave effect control"""

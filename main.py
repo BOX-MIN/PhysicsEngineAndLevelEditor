@@ -85,7 +85,7 @@ def main():
     while True:
         handle_events()
 
-        mouseCursorBall.move(200)
+        mouseCursorBall.follow_cursor(200)
         player.move(20)
 
         # temporary camera controls

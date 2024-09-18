@@ -25,6 +25,18 @@ import pygame
 import setup
 
 
+class Leg:
+    def __init__(self, target, length_top, length_bottom, pos_on_target=(0, 0)):
+        self.top_leg_body = pymunk.Body()
+        self.top_leg_poly = pymunk.Segment(self.top_leg_body, target.position, target.position + (0, length_top), 3)
+        self.bottom_leg_body = pymunk.Body()
+        self.bottom_leg_poly = pymunk.Segment(self.top_leg_body, target.position + (0, length_top),
+                                              target.position + (0, length_top) + (0, length_bottom), 3)
+        top_muscle = pymunk.DampedRotarySpring(target, self.top_leg_body, 0, 4, 3)
+        bottom_muscle = pymunk.DampedRotarySpring(target, self.top_leg_body, 0, 4, 3)
+
+
+
 class PlayerBox:
     def __init__(self, a, b, c, d, density, elasticity=0.20, friction=1, color=(255, 0, 255)):
         self.cube_body = pymunk.Body()

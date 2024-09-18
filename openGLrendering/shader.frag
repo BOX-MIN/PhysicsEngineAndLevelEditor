@@ -40,6 +40,10 @@ uniform vec3 light_color;
 in vec2 uvs;
 out vec4 layered;
 
+vec2 worldCoordsToUvs(vec2 world_point) {
+    return world_point / vec2(screen_width, screen_height);
+}
+
 vec4 layer(vec4 foreground, vec4 background);
 
 void main() {
@@ -61,15 +65,12 @@ void main() {
 
     //  + sin(uvs.y * 10 + time * rate) * amplitude adding this code made the lights not do the sine thing
 
+    // TODO: use the worldCoordsToUvs function to convert to uvs instead of directly using the aspect ratio, to remove dependence on a secific aspect ratio for light to be the size that it should be
     vec2 light_center = vec2((center.x + ((cam.x + lightoffset.x) / screen_width * aspect_ratio)), center.y + (cam.y + lightoffset.y) / screen_height);
-    float light_off_center = sqrt( ((CRT_uvs.x * aspect_ratio - light_center.x) * (CRT_uvs.x * aspect_ratio - light_center.x)) + ((CRT_uvs.y - light_center.y) * (CRT_uvs.y - light_center.y)) );
+    float light_off_center = sqrt( ((CRT_uvs.x * 1 - light_center.x) * (CRT_uvs.x * 1 - light_center.x)) + ((CRT_uvs.y - light_center.y) * (CRT_uvs.y - light_center.y)) );
     vec2 light_off_center_vec2 = vec2(light_off_center, light_off_center);
     vec2 light_on_center = (1 / vec2(abs(light_off_center_vec2.x / light_intensity), abs(light_off_center_vec2.y / light_intensity)));
     light_off_center_vec2 = vec2(light_off_center_vec2.x / shadow_fade, light_off_center_vec2.y / shadow_fade);
-
-    float foo = aspect_ratio;
-
-    vec4 background = vec4(texture(tex1, CRT_uvs).rgb, 1.0);
 
     //vec4 background = vec4(mix(
     //    mix(mix(texture(tex1, CRT_uvs).rgb, shadowcolor.rgb, abs(light_off_center_vec2.x)),
@@ -80,6 +81,8 @@ void main() {
     //
     //    0.0005)
     //, 1.0);
+
+    vec4 background = vec4(texture(tex1, CRT_uvs).rgb, 1.0);
 
     if (CRT_uvs.x > 1.0 ||
         CRT_uvs.x < 0.0 ||

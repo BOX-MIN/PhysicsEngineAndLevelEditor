@@ -104,7 +104,7 @@ reuse textures for modernGL rendering:
         takes more processing power than is necessary.
     INTENDED BEHAVIOUR: create two openGL textures at the start of the program, and then reuse them every frame instead.
 
-make light radius not depend on screen size:
+make light radius not depend on screen size:                                                               //in progress
     ISSUE: light radius is affected by the size of the screen.
     INTENDED BEHAVIOUR: light radius should be independent of screen size.
 
