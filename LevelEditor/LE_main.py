@@ -227,6 +227,7 @@ def mouse_events_collisions_mode(event):
                 x4, y4 = x3, y3
 
             distance = sqrt((mx - x1) ** 2 + (my - y1) ** 2)
+            # what causes you to 'lose hold' of the corner if moving too fast
             range_limiter = 10
             if distance < range_limiter:
                 tempx, tempy = x1, y1

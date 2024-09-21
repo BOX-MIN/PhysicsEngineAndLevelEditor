@@ -25,47 +25,48 @@ import pygame
 import setup
 
 
-class Leg:
-    def __init__(self, target, length_top, length_bottom, pos_on_target=(0, 0)):
-        self.top_leg_body = pymunk.Body()
-        self.top_leg_poly = pymunk.Poly(self.top_leg_body, [(200, 200), (215, 240), (250, 250), (240, 250)])
-        self.top_leg_poly.density = 50
+class Dangler:
+    def __init__(self, attachbody, position, a, b, c, d, connect_pos, dangle_connect_pos):
+        self.danglebody = pymunk.Body()
+        self.danglebody.position = position
+        self.dangleshape = pymunk.Poly(self.danglebody, [a, b, c, d])
+        self.dangleshape.density = 1000
+        self.dangleshape.friction = 1
+        self.dangleshape.filter = pymunk.ShapeFilter(group=2)
 
-        #self.bottom_leg_body = pymunk.Body()
-        #self.bottom_leg_poly = pymunk.Segment(self.top_leg_body, target.position + (0, length_top),
-                                     #         target.position + (0, length_top) + (0, length_bottom), 3)
-        self.top_pivot = pymunk.PinJoint(self.top_leg_body, target, target.position)
-        self.top_pivot.error_bias = pow(1.0 - 0.5, 60.0)
-        self.top_pivot.distance = 0
-        #self.top_muscle = pymunk.DampedRotarySpring(target, self.top_leg_body, 0, 10000000, 10000)
-        #self.bottom_muscle = pymunk.DampedRotarySpring(self.top_leg_body, self.bottom_leg_body, 0, 10000000, 10000)
-        setup.space.add(self.top_leg_body, self.top_leg_poly, self.top_pivot)#, self.bottom_leg_body, self.bottom_leg_poly, self.top_muscle, self.bottom_muscle)
+        self.pin = pymunk.constraints.PinJoint(attachbody, self.danglebody, connect_pos, dangle_connect_pos)
+        self.pin.distance = 0
+        # self.pin.collide_bodies = False
+        setup.space.add(self.danglebody, self.dangleshape, self.pin)
 
-    def draw(self, pos):
+    def draw(self):
         vertices = []
-        for v in self.top_leg_poly.get_vertices():
-            x, y = v.rotated(self.top_leg_poly.body.angle) + self.top_leg_poly.body.position
+        for v in self.dangleshape.get_vertices():
+            x, y = v.rotated(self.dangleshape.body.angle) + self.dangleshape.body.position
             vertices.append((int(x + setup.camx), int(y + setup.camy)))
 
-        pygame.draw.polygon(setup.display, (0,240,240), vertices)
+        pygame.draw.polygon(setup.display, (200, 150, 5), vertices)
 
 class PlayerBox:
-    def __init__(self, a, b, c, d, density, elasticity=0.20, friction=1, color=(255, 0, 255)):
+    def __init__(self, center_x, center_y, a, b, c, d, density, elasticity=0.20, friction=1, color=(255, 0, 255)):
         self.cube_body = pymunk.Body()
+        self.cube_body.position = (center_x, center_y)
         self.cube_shape = pymunk.Poly(self.cube_body, [a, b, c, d])
         self.cube_shape.density = density
         self.cube_shape.elasticity = elasticity
         self.cube_shape.friction = friction
         self.color = color
         setup.space.add(self.cube_body, self.cube_shape)
-        self.leg_one = Leg(self.cube_body, 500, 40)
+
+        self.limb1 = Dangler(self.cube_shape.body, (center_x, center_y), (-5, 0), (5, 0), (-5, 25), (5, 25), (10, 25), (0, 0))
+        self.limb2 = Dangler(self.cube_shape.body, (center_x, center_y), (-5, 0), (5, 0), (-5, 25), (5, 25), (-10, 25),
+                             (0, 0))
 
         self.vx = 0
         self.vy = 0
         self.movement_friction = 0.6
 
     def draw(self):
-        self.leg_one.draw(self.cube_shape.center_of_gravity)
         vertices = []
         for v in self.cube_shape.get_vertices():
             x, y = v.rotated(self.cube_shape.body.angle) + self.cube_shape.body.position
@@ -73,18 +74,16 @@ class PlayerBox:
 
         pygame.draw.polygon(setup.display, self.color, vertices)
 
-    def move(self, speed):
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_SPACE]:
-            if keys[pygame.K_RIGHT]:
-                self.vx += speed
-            if keys[pygame.K_LEFT]:
-                self.vx += -speed
-            if keys[pygame.K_UP]:
-                self.vy += -speed * 2
+        self.limb1.draw()
+        self.limb2.draw()
 
-        self.vx *= self.movement_friction
-        self.vy *= self.movement_friction
+    def move(self, speed, offset=(0, 55)):
+        x, y = self.cube_body.position
+        x = x + setup.camx
+        y = y + setup.camy
+        x2, y2 = pygame.mouse.get_pos()
+        ox, oy = offset  # mouse offset
 
-        self.cube_body.velocity += (self.vx, self.vy)
-        self.leg_one.top_leg_body.velocity += (self.vx, self.vy)
+        self.cube_body.velocity = (x2 + ox - x) * speed, (y2 + oy - y) * speed
+
+

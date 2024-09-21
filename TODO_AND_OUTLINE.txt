@@ -104,10 +104,6 @@ reuse textures for modernGL rendering:
         takes more processing power than is necessary.
     INTENDED BEHAVIOUR: create two openGL textures at the start of the program, and then reuse them every frame instead.
 
-make light radius not depend on screen size:                                                               //in progress
-    ISSUE: light radius is affected by the size of the screen.
-    INTENDED BEHAVIOUR: light radius should be independent of screen size.
-
 LE SPECIFIC -- make polygon shapes able to be edited, then moved, without resetting shape:
     ISSUE: if the vertices of a polygon are changed in the level editor, the JSON needs to be saved and reloaded before
         moving that polygon, otherwise the vertices reset to how they were before the change.
@@ -137,13 +133,27 @@ LE SPECIFIC -- make polygon shapes able to be edited, then moved, without resett
 ^^^^^^^^^^^^^^^ === ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 TEMPORARY CODE STORAGE: ------------------------------------------------------------------------------------------------
 
-save_load_system.save_object('testRoom', 'Ball', [111, -123, 12])
-save_load_system.save_object('testRoom', 'Ball', [340, 123, 12])
-save_load_system.save_object('testRoom', 'Ball', [222, 123, 30])
-save_load_system.save_object('testRoom', 'Ball', [222, 123, 20])
-save_load_system.save_object('testRoom', 'Ball', [222, 123, 40])
-save_load_system.save_object('testRoom', 'Wall', [(0, 340), (400, 360), (0, 400), (400, 400)])
-save_load_system.save_object('testRoom', 'Wall', [(350, -400), (400, -400), (395, 400), (400, 400)])
-save_load_system.save_object('testRoom', 'Wall', [(0, -400), (25, -400), (0, 400), (25, 400)])
-save_load_system.save_object('testRoom', 'Wall', [(200, 300), (125, 400), (125, 400), (350, 400)])
-save_load_system.save_object('testRoom', 'Wall', [(0, -400), (0, -380), (400, -400), (400, -380)])
+--> attempt at player leg:
+class Leg:
+    def __init__(self, target, length_top, length_bottom, pos_on_target=(0, 0)):
+        self.top_leg_body = pymunk.Body()
+        self.top_leg_poly = pymunk.Poly(self.top_leg_body, [(200, 200), (215, 240), (250, 250), (240, 250)])
+        self.top_leg_poly.density = 50
+
+        #self.bottom_leg_body = pymunk.Body()
+        #self.bottom_leg_poly = pymunk.Segment(self.top_leg_body, target.position + (0, length_top),
+                                     #         target.position + (0, length_top) + (0, length_bottom), 3)
+        self.top_pivot = pymunk.PinJoint(self.top_leg_body, target, target.position)
+        self.top_pivot.error_bias = pow(1.0 - 0.5, 60.0)
+        self.top_pivot.distance = 0
+        #self.top_muscle = pymunk.DampedRotarySpring(target, self.top_leg_body, 0, 10000000, 10000)
+        #self.bottom_muscle = pymunk.DampedRotarySpring(self.top_leg_body, self.bottom_leg_body, 0, 10000000, 10000)
+        setup.space.add(self.top_leg_body, self.top_leg_poly, self.top_pivot)#, self.bottom_leg_body, self.bottom_leg_poly, self.top_muscle, self.bottom_muscle)
+
+    def draw(self, pos):
+        vertices = []
+        for v in self.top_leg_poly.get_vertices():
+            x, y = v.rotated(self.top_leg_poly.body.angle) + self.top_leg_poly.body.position
+            vertices.append((int(x + setup.camx), int(y + setup.camy)))
+
+        pygame.draw.polygon(setup.display, (0,240,240), vertices)

@@ -65,7 +65,7 @@ def handle_events():
 
 def main():
     #waterone = objects.PreWaterObject(200, 0, 100, 100, 500, 0, 2, 100, (0, 255, 0), True)
-    save_load_system.load_level('ballcascades.json')
+    save_load_system.load_level('arena.json')
     #save_load_system.load_level('bestroom.json')
     # TODO: when implementing level editor, make sure that objects can reference other objects, so that things like
     #  strings will work
@@ -75,7 +75,8 @@ def main():
 
     Mx, My = pygame.mouse.get_pos()
     mouseCursorBall = objects.KinematicObject(Mx, My, 15)
-    player = npc.PlayerBox((200, 200), (250,250), (200, 250), (250, 200), 1000, color=(0, 0, 0))
+    player = npc.PlayerBox(200, 200,(-20, -20), (20, -20), (20, 20), (-20, 20), 10000, color=(0, 0, 0))
+    player2 = npc.PlayerBox(200, 200, (-20, -20), (20, -20), (20, 20), (-20, 20), 10000, color=(0, 0, 0))
 
     lxvel = 0
     lyvel = 0
@@ -86,26 +87,27 @@ def main():
         handle_events()
 
         mouseCursorBall.follow_cursor(200)
-        player.move(20)
+        player.move(2)
+        player2.move(2, (30, 120))
 
         # temporary camera controls
         key = pygame.key.get_pressed()
         if key[K_SPACE]:
-            if key[K_RIGHT]:
+            if key[K_RIGHT] or key[K_d]:
                 lxvel += camspeed
-            elif key[K_LEFT]:
+            elif key[K_LEFT] or key[K_a]:
                 lxvel += -camspeed
-            elif key[K_UP]:
+            elif key[K_UP] or key[K_w]:
                 lyvel += -camspeed
-            elif key[K_DOWN]:
+            elif key[K_DOWN] or key[K_s]:
                 lyvel += camspeed
-        elif key[K_RIGHT]:
+        elif key[K_RIGHT] or key[K_d]:
             setup.camx += -camspeed
-        elif key[K_LEFT]:
+        elif key[K_LEFT] or key[K_a]:
             setup.camx += camspeed
-        elif key[K_UP]:
+        elif key[K_UP] or key[K_w]:
             setup.camy += camspeed
-        elif key[K_DOWN]:
+        elif key[K_DOWN] or key[K_s]:
             setup.camy += -camspeed
 
         """pygame_GUI stuff"""
@@ -123,6 +125,7 @@ def main():
         for i in objects.render_list:
             i.draw()
         player.draw()
+        player2.draw()
 
         # fps counter background
         pygame.draw.rect(gui_display, (0, 0, 1), [(-35, 0), (255, 25)])
